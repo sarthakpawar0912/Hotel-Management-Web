@@ -11,7 +11,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
+  
   registerForm!: FormGroup;
+
 
   constructor(
     private fb: FormBuilder,
@@ -20,6 +22,7 @@ export class RegisterComponent {
     private router: Router
   ) {}
 
+
   ngOnInit() {
     this.registerForm = this.fb.group({
       email: [null, [Validators.email, Validators.required]],
@@ -27,6 +30,7 @@ export class RegisterComponent {
       name: [null, Validators.required]
     });
   }
+
 
   submitForm() {
     this.authService.register(this.registerForm.value).subscribe(
@@ -43,4 +47,5 @@ export class RegisterComponent {
       }
     );
   }
+
 }

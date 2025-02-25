@@ -5,16 +5,20 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { AuthService } from '../../services/auth/auth.service';
 import { UserStorageService } from '../../services/storage/user-storage.service';
 
+
 @Component({
   selector: 'app-login',
   standalone:false,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
+
+
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isAdminLoggedIn: boolean = false;
   isCustomerLoggedIn: boolean = false;
+
 
   constructor(
     private fb: FormBuilder,
@@ -24,6 +28,8 @@ export class LoginComponent implements OnInit {
     private userStorage: UserStorageService,
     private cdr: ChangeDetectorRef
   ) {}
+
+
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -39,12 +45,14 @@ export class LoginComponent implements OnInit {
     });
   }
 
+
   submitForm() {
     if (this.loginForm.invalid) {
       this.message.error('Please fill in all required fields.');
       return;
     }
   
+
     this.authService.login(this.loginForm.value).subscribe(
       res => {
         if (res.userId && res.jwt) {

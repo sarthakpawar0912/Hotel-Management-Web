@@ -1,5 +1,6 @@
 <div class="center-form">
   
+  
     <!-- Logo -->
     <img src="../../../assets/logo.png" alt="Logo" class="logo" />
   
@@ -8,6 +9,7 @@
     <!-- Registration Form -->
     <form nz-form [formGroup]="loginForm"  (ngSubmit)="submitForm()" class="custom-form">
   
+
      
   
       <!-- Email Field -->
@@ -18,6 +20,7 @@
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
+
   
       <!-- Password Field -->
       <nz-form-item>
@@ -28,10 +31,12 @@
         </nz-form-control>
       </nz-form-item>
   
+
       <!-- Submit Button -->
       <button nz-button nzType="primary" class="submit-btn" [disabled]="loginForm.invalid">
         Login
       </button>
+
   
     </form>
   </div>
