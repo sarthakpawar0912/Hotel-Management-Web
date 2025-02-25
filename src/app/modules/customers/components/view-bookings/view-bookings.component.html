@@ -1,6 +1,7 @@
 <div class="center-form">
   <h1 class="page-title">My Bookings</h1>
 
+
   <nz-table #basicTable [nzData]="bookings" [nzShowPagination]="false">
     <thead>
       <tr>
@@ -13,6 +14,7 @@
       </tr>
     </thead>
     <tbody>
+
       <tr *ngFor="let booking of basicTable.data">
         <td>{{ booking.roomName }}</td>
         <td>{{ booking.roomType }}</td>
@@ -20,12 +22,14 @@
         <td>{{ booking.checkoutDate }}</td>
         <td>{{ booking.price }}</td>
         <td>
+
           <ng-container *ngIf="booking.reservationStatus === 'PENDING'">
             <nz-tag nzColor="processing">
               <span nz-icon nzType="sync" nzSpin></span>
               <span>Pending</span>
             </nz-tag>
           </ng-container>
+
 
           <ng-container *ngIf="booking.reservationStatus === 'APPROVED'">
             <nz-tag nzColor="success">
@@ -34,16 +38,19 @@
             </nz-tag>
           </ng-container>
 
+
           <ng-container *ngIf="booking.reservationStatus === 'REJECTED'">
             <nz-tag nzColor="error">
               <span nz-icon nzType="close-circle"></span>
               <span>Rejected</span>
             </nz-tag>
           </ng-container>
+
         </td>
       </tr>
     </tbody>
   </nz-table>
+
 
   <div class="pagination">
     <nz-pagination 
@@ -52,5 +59,7 @@
       [nzPageSize]="5" 
       (nzPageIndexChange)="pageIndexChange($event)">
     </nz-pagination>
+
   </div>
+  
 </div>

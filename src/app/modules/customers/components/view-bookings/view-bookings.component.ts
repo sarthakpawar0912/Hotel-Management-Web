@@ -8,17 +8,21 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   templateUrl: './view-bookings.component.html',
   styleUrl: './view-bookings.component.scss'
 })
+
 export class ViewBookingsComponent {
+
 
   currentPage:any=1;
   total:any;
   bookings:any;
+
 
   constructor(private customerService:CustomerService,
     private message:NzMessageService
   ){
     this.getBookings();
   }
+
 
   getBookings(){
     this.customerService.getMyBookings(this.currentPage-1).subscribe(res=>{
@@ -32,22 +36,10 @@ export class ViewBookingsComponent {
   }
 
 
+
   pageIndexChange(value:any){
     this.currentPage=value;
     this.getBookings();
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
