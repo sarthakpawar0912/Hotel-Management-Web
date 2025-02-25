@@ -5,14 +5,18 @@ import { UserStorageService } from '../../../auth/services/storage/user-storage.
 
 
 const BASIC_URL="http://localhost:8080/";
+
 @Injectable({
   providedIn: 'root'
+
 })
 export class CustomerService {
+
 
   constructor(private http:HttpClient,
       private userStorage:UserStorageService
   ) { }
+
 
   
     getRooms(pageNumber: number): Observable<any> {
@@ -21,11 +25,13 @@ export class CustomerService {
       });
     }
 
+
     bookRoom(bookingDto: any): Observable<any> {
       return this.http.post(`${BASIC_URL}api/customer/book`,bookingDto, {
         headers: this.createAuthorizationHeader(),
       });
     }
+
 
     getMyBookings(pageNumber: number): Observable<any> {
       const userId = this.userStorage.getUserId(); // ✅ Use injected instance
@@ -33,12 +39,15 @@ export class CustomerService {
         headers: this.createAuthorizationHeader(),
       });
     }
-  
-
-     
-      createAuthorizationHeader(){
     
-        let authHeaders: HttpHeaders = new HttpHeaders();
-        return authHeaders.set('Authorization', 'Bearer ' + this.userStorage.getToken());
-      }
+      
+    createAuthorizationHeader(){
+    
+        
+      let authHeaders: HttpHeaders = new HttpHeaders();
+        
+      return authHeaders.set('Authorization', 'Bearer ' + this.userStorage.getToken());
+    }
+
+    
 }
