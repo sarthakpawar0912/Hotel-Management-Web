@@ -11,6 +11,7 @@ import { UserStorageService } from '../../../../auth/services/storage/user-stora
   templateUrl: './rooms.component.html',
   styleUrl: './rooms.component.scss'
 })
+
 export class RoomsComponent {
   currentpage = 1;
   rooms: any[] = [];
@@ -22,6 +23,7 @@ export class RoomsComponent {
   checkOutDate!: Date;
   id!: number;
 
+
   constructor(
     private customerService: CustomerService,
     private message: NzMessageService,
@@ -30,6 +32,7 @@ export class RoomsComponent {
   ) {
     this.getRooms();
   }
+
 
   getRooms() {
     this.customerService.getRooms(this.currentpage - 1).subscribe(res => {
@@ -48,10 +51,12 @@ export class RoomsComponent {
     });
   }
 
+
   pageIndexChange(value: any) {
     this.currentpage = value;
     this.getRooms();
   }
+
 
   onChange(result: Date[]): void {
     if (result.length === 2) {
@@ -60,9 +65,11 @@ export class RoomsComponent {
     }
   }
 
+
   handleCancelMiddle(): void {
     this.isVisibleMiddle = false;
   }
+
 
   handleOkMiddle(): void {
     const obj = {
@@ -72,6 +79,7 @@ export class RoomsComponent {
       checkOutDate: this.checkOutDate
     };
 
+
     this.customerService.bookRoom(obj).subscribe(res => {
       this.message.success(`Request submitted for approval..!`, { nzDuration: 5000 });
       this.isVisibleMiddle = false;
@@ -80,8 +88,10 @@ export class RoomsComponent {
     });
   }
 
+
   showModalMiddle(id: number) {
     this.id = id;
     this.isVisibleMiddle = true;
   }
+  
 }
