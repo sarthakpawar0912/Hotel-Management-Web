@@ -1,0 +1,61 @@
+@use "bootstrap";
+
+// Center the form
+.center-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #f5f5f5;
+    padding: 20px;
+
+    // Logo styling
+    .logo {
+        width: 150px; /* Adjusted width */
+        height: auto; /* Maintain aspect ratio */
+        margin-bottom: 15px;
+        display: block;
+    }
+
+    h2 {
+        color: #4a148c;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+}
+
+// Form styling
+.custom-form {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+
+    nz-form-item {
+        margin-bottom: 16px;
+    }
+
+    input[nz-input] {
+        height: 40px;
+        font-size: 14px;
+        border-radius: 8px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        height: 40px;
+        font-size: 16px;
+        background: linear-gradient(135deg, #4a148c, #7b1fa2);
+        border: none;
+        color: #fff;
+        border-radius: 8px;
+        transition: all 0.3s;
+
+        &:hover {
+            background: linear-gradient(135deg, #7b1fa2, #4a148c);
+        }
+    }
+}

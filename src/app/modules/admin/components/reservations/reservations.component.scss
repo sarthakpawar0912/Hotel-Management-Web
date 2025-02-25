@@ -1,0 +1,44 @@
+.center-form {
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .page-title {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  nz-table {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  th, td {
+    text-align: center;
+    padding: 10px;
+  }
+  
+  td {
+    font-size: 14px;
+  }
+  
+  nz-tag {
+    font-weight: bold;
+  }
+  
+  .pagination {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  nz-pagination {
+    display: inline-block;
+  }
+  

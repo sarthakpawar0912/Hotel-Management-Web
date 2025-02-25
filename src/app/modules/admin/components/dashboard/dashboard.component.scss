@@ -1,0 +1,55 @@
+@use "bootstrap";
+
+.center-form {
+  text-align: center;
+  margin: 20px 0;
+
+  .post-room-btn {
+    background-color: #4a148c;
+    border: none;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+
+    &:hover {
+      background-color: #7b1fa2;
+    }
+  }
+}
+
+.room-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.room-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+nz-card {
+  border-radius: 10px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+nz-card-meta {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 20px;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}

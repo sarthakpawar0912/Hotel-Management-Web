@@ -1,0 +1,62 @@
+<div class="center-form">
+   
+  <div class="room-container" *ngIf="rooms.length > 0">
+    <div class="room-row" *ngFor="let room of rooms">
+      <nz-card style="width: 300px; margin: 16px" [nzActions]="[actionEdit]">
+        <nz-skeleton [nzActive]="true" [nzLoading]="loading" [nzAvatar]="true">
+          
+          <nz-card-meta 
+            [nzAvatar]="avatarTemplate" 
+            nzTitle="{{ room.name }}" 
+            nzDescription="Type: {{ room.type }}">
+          </nz-card-meta>
+  
+          <nz-card-meta 
+            style="margin-left: 49px;" 
+            nzDescription="Price: ₹{{ room.price }}">
+          </nz-card-meta>
+  
+        </nz-skeleton>
+      </nz-card>
+  
+      <!-- Avatar Template -->
+      <ng-template #avatarTemplate>
+        <nz-avatar nzSrc="https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4"></nz-avatar>
+      </ng-template>
+  
+      <!-- Edit Action -->
+      <ng-template #actionEdit>
+        <span nz-icon nzType="check-square" [nzTheme]="'twotone'" class="icon"
+        
+        (click)="showModalMiddle(room.id)"
+        ></span>
+      </ng-template>
+  
+    <!-- Pagination -->
+    <div class="pagination">
+      <nz-pagination 
+        [nzPageIndex]="currentpage" 
+        [nzTotal]="total" 
+        [nzPageSize]="10" 
+        (nzPageIndexChange)="pageIndexChange($event)">
+      </nz-pagination>
+    </div>
+  </div>
+
+  <nz-modal 
+  nzTitle="Book Room" 
+  nzCentered 
+  [(nzVisible)]="isVisibleMiddle" 
+  (nzOnCancel)="handleCancelMiddle()" 
+  (nzOnOk)="handleOkMiddle()"
+>
+  <ng-container *nzModalContent>
+    <div class="modal-content">
+      <nz-range-picker 
+        style="width: 100%;" 
+        [(ngModel)]="date" 
+        (ngModelChange)="onChange($event)">
+      </nz-range-picker>
+    </div>
+  </ng-container>
+</nz-modal>

@@ -1,0 +1,96 @@
+@use "bootstrap"; // Import Bootstrap
+
+// Global Styles
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #f5f5f5;
+}
+
+// Center the form
+.center-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+// Room Container
+.room-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+// Individual Room Card
+.room-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// Card Styling
+nz-card {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Avatar inside Card
+nz-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+// Icon for Edit Action
+.icon {
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+// Pagination Styling
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+// Modal Content
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px;
+}
+
+nz-range-picker {
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+// Responsive Styles
+@media (max-width: 768px) {
+  .room-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  nz-card {
+    width: 100%;
+    max-width: 300px;
+  }
+}
