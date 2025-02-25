@@ -31,16 +31,17 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
     DashboardComponent,
     ReservationsComponent
   ],
+
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    NzFormModule,       // ✅ Required for nz-form and nz-form-item
-    NzInputModule,      // ✅ Required for nz-input
-    NzButtonModule,     // ✅ Required for nz-button
+    NzFormModule,       
+    NzInputModule,      
+    NzButtonModule,     
     NzMessageModule,
-    NzTableModule,      // ✅ Required for nz-table
-    NzTagModule,         // ✅ Required for nz-tag
+    NzTableModule,      
+    NzTagModule,         
     NzPaginationModule,
     AdminRoutingModule,
     DemoNgZorroAntdModule,
@@ -52,4 +53,5 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
     NzSpinModule
   ]
 })
+
 export class AdminModule { }
