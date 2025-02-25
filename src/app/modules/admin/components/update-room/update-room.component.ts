@@ -11,6 +11,7 @@ import { AdminService } from '../../admin-services/admin.service';
   styleUrl: './update-room.component.scss'
 })
 export class UpdateRoomComponent {
+  
   updateRoomForm: FormGroup;
   id: any; // ✅ Declare it first
 
@@ -22,7 +23,6 @@ export class UpdateRoomComponent {
     private activatedroute: ActivatedRoute // ✅ Initialize it first
   ) { 
     this.id = this.activatedroute.snapshot.params['id']; // ✅ Now it's initialized correctly
-    
     this.updateRoomForm = this.fb.group({
       name: ['', Validators.required],
       type: ['', Validators.required],
@@ -30,6 +30,7 @@ export class UpdateRoomComponent {
     });
     this.getRoomsById();
   }
+
 
   submitForm() {
     if (this.updateRoomForm.valid) {
@@ -44,8 +45,6 @@ export class UpdateRoomComponent {
       this.message.error("Please fill in all required fields.");
     }
   }
-  
-
 
   getRoomsById(){
     this.adminService.getRoomsById(this.id).subscribe(res=>{
@@ -54,10 +53,6 @@ export class UpdateRoomComponent {
       this.message.error(`${error.error}`,{nzDuration:5000})
     })
   }
-
-
-
-
 
 }
 
