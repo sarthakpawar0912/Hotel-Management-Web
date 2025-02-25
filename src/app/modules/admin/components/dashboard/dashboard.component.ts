@@ -15,6 +15,7 @@ export class DashboardComponent {
   total = 0;
   loading = false;
 
+  
   constructor(
     private adminService: AdminService,
     private message: NzMessageService,
@@ -22,6 +23,7 @@ export class DashboardComponent {
   ) {
     this.getRooms();
   }
+
 
   getRooms() {
     this.adminService.getRooms(this.currentpage - 1).subscribe(res => {
@@ -40,10 +42,12 @@ export class DashboardComponent {
     });
   }
   
+
   pageIndexChange(value: any) {
     this.currentpage = value;
     this.getRooms();
   }
+
 
   deleteRoom(roomId: number) {
     this.adminService.deleteRoom(roomId).subscribe(res => {
@@ -54,6 +58,7 @@ export class DashboardComponent {
     });
   }
 
+
   showConfirm(roomId: number) {
     this.modalService.confirm({
       nzTitle: 'Confirm',
@@ -63,5 +68,6 @@ export class DashboardComponent {
       nzOnOk: () => this.deleteRoom(roomId)
     });
   }
+
  
 }

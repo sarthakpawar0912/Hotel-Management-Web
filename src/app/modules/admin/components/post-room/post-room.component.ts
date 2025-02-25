@@ -4,15 +4,19 @@ import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { AdminService } from '../../admin-services/admin.service';
 
+
 @Component({
   selector: 'app-post-room',
   standalone: false,
   templateUrl: './post-room.component.html',
   styleUrl: './post-room.component.scss'
 })
+
 export class PostRoomComponent {
 
+
   roomDetailsForm:FormGroup; 
+
 
   constructor(private fb:FormBuilder,
     private message:NzMessageService,
@@ -25,8 +29,6 @@ export class PostRoomComponent {
   })}
 
 
-
-
   submitForm() {
     this.adminService.postRoomDetails(this.roomDetailsForm.value).subscribe(res => {
       this.message.success(`Room posted Successfully`, { nzDuration: 5000 });
@@ -35,4 +37,5 @@ export class PostRoomComponent {
       this.message.error(`${error.error}`, { nzDuration: 5000 });
     });
   }
+  
 }
