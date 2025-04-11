@@ -44,8 +44,7 @@ export class ReservationsComponent {
     );
   }
   
-
-  // ✅ Change reservation status
+// ✅ Change reservation status
   changeReservationStatus(reservationId: number, status: string) {
     this.adminService.changeReservationStatus(reservationId, status).subscribe(
       () => {
@@ -64,6 +63,5 @@ export class ReservationsComponent {
     this.currentPage = value;
     this.getReservations();
   }
-  
   
 }
