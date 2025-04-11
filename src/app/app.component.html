@@ -1,4 +1,5 @@
 <nz-layout>
+  
   <!-- Default Sidebar (Not Logged In) -->
   <nz-sider nzCollapsible nzWidth="200px" *ngIf="!isAdminLoggedIn && !isCustomerLoggedIn">
     <div class="logo"></div>
@@ -18,22 +19,27 @@
   <nz-sider nzCollapsible nzWidth="200px" *ngIf="isAdminLoggedIn">
     <div class="logo"></div>
     <ul nz-menu nzTheme="dark" nzMode="inline">
+     
       <li nz-menu-item routerLink="/admin/room">
         <span nz-icon nzType="apartment"></span>
         <span><strong>Post Room</strong></span>
       </li>
+     
       <li nz-menu-item routerLink="/admin/dashboard">
         <span nz-icon nzType="apartment"></span>
         <span><strong>Rooms</strong></span>
       </li>
+     
       <li nz-menu-item routerLink="/admin/reservations">
         <span nz-icon nzType="pull-request"></span>
         <span><strong>Reservations</strong></span>
       </li>
+     
       <li nz-menu-item (click)="logout()">
         <span nz-icon nzType="logout"></span>
         <span><strong>Logout</strong></span>
       </li>
+      
     </ul>
   </nz-sider>
 
