@@ -35,12 +35,10 @@ export class CustomerService {
     }
     
     createAuthorizationHeader(){
-    
-        
+      
       let authHeaders: HttpHeaders = new HttpHeaders();
         
       return authHeaders.set('Authorization', 'Bearer ' + this.userStorage.getToken());
     }
 
-    
 }
