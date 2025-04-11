@@ -1,0 +1,74 @@
+
+// Global Styles
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #f5f5f5;
+}
+
+// Layout styles
+nz-layout {
+  min-height: 100vh;
+  display: flex;
+}
+
+// Sidebar styles
+nz-sider {
+  background: linear-gradient(135deg, #4a148c, #7b1fa2); // Sidebar gradient
+  color: #fff;
+  box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.2);
+
+  .logo {
+    height: 64px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 16px;
+    border-radius: 10px;
+  }
+
+  ul[nz-menu] {
+    background: transparent;
+    padding: 0;
+
+    li[nz-menu-item] {
+      color: #fff;
+      font-size: 16px;
+      transition: all 0.3s;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 8px;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      span[nz-icon] {
+        color: #ffeb3b;
+      }
+    }
+  }
+}
+
+// Content styles
+nz-content {
+  background: #f5f5f5;
+  padding: 24px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+// Footer styles
+nz-footer {
+  background: #4a148c;
+  color: #fff;
+  text-align: center;
+  padding: 12px;
+  font-size: 14px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}

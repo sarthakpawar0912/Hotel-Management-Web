@@ -1,0 +1,67 @@
+<!-- Loader -->
+<nz-spin *ngIf="loading"></nz-spin>
+
+<!-- No Rooms Message -->
+<div *ngIf="!loading && rooms.length === 0" class="no-rooms">
+  <p>No rooms available.</p>
+</div>
+
+<!-- Room Wrapper (Fixes Pagination Issue) -->
+<div class="room-wrapper">
+  <!-- Room List -->
+  <div class="room-container" *ngIf="rooms.length > 0">
+    <div class="room-row" *ngFor="let room of rooms">
+      <nz-card style="width: 300px; margin: 16px" [nzActions]="[actionBook]">
+        <nz-skeleton [nzActive]="true" [nzLoading]="loading" [nzAvatar]="true">
+          <nz-card-meta [nzAvatar]="avatarTemplate" nzTitle="{{ room.name }}" nzDescription="Type: {{ room.type }}">
+          </nz-card-meta>
+          <nz-card-meta style="margin-left: 49px" nzDescription="Price: ₹{{ room.price }}">
+          </nz-card-meta>
+        </nz-skeleton>
+      </nz-card>
+
+      <!-- Avatar Template -->
+      <ng-template #avatarTemplate>
+        <nz-avatar nzSrc="https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4"></nz-avatar>
+      </ng-template>
+
+      <!-- Book Room Action -->
+      <ng-template #actionBook>
+        <span nz-icon nzType="check-square" [nzTheme]="'twotone'" class="icon" (click)="showModalMiddle(room.id)">
+        </span>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Pagination (Fixed at Bottom) -->
+  <div class="pagination">
+    <nz-pagination 
+      [nzPageIndex]="currentpage" 
+      [nzTotal]="total" 
+      [nzPageSize]="10" 
+      (nzPageIndexChange)="pageIndexChange($event)">
+    </nz-pagination>
+  </div>
+</div>
+
+<!-- Book Room Modal -->
+<nz-modal nzTitle="Book Room" nzCentered [(nzVisible)]="isVisibleMiddle" (nzOnCancel)="handleCancelMiddle()" (nzOnOk)="handleOkMiddle()">
+  <ng-container *nzModalContent>
+    <div class="modal-content">
+      <label>Check-in Date</label>
+      <nz-date-picker
+        style="width: 100%;"
+        [(ngModel)]="checkInDate"
+        (ngModelChange)="onCheckInChange($event)">
+      </nz-date-picker>
+
+      <label>Check-out Date</label>
+      <nz-date-picker
+        style="width: 100%;"
+        [(ngModel)]="checkOutDate"
+        (ngModelChange)="onCheckOutChange($event)"
+        [nzDisabledDate]="disableCheckOutDate">
+      </nz-date-picker>
+    </div>
+  </ng-container>
+</nz-modal>

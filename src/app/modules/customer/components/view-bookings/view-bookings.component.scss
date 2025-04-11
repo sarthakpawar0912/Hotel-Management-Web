@@ -1,0 +1,97 @@
+/* Centered Form Styling */
+.center-form {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #6a0572, #a4508b); /* Stylish Gradient */
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Page Title */
+.page-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffccff;
+  margin-bottom: 20px;
+}
+
+/* Table Container (Ensures Consistent Height) */
+.table-container {
+  width: 100%;
+  min-height: 300px; /* Ensures table does not shrink when records are fewer */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Table Styling */
+nz-table {
+  background: transparent !important;
+  color: #fff !important;
+  width: 100%;
+}
+
+nz-table thead {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+nz-table th {
+  color: #ffccff !important;
+  font-size: 16px;
+  padding: 12px;
+  text-align: center;
+}
+
+nz-table td {
+  text-align: center;
+  padding: 10px;
+}
+
+/* Status Tags Styling */
+nz-tag {
+  font-size: 14px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+/* Status Tag Colors */
+nz-tag[ng-reflect-nz-color="processing"] {
+  background: #ffcc00 !important;
+  color: black !important;
+}
+
+nz-tag[ng-reflect-nz-color="success"] {
+  background: #00cc66 !important;
+  color: white !important;
+}
+
+nz-tag[ng-reflect-nz-color="error"] {
+  background: #ff3333 !important;
+  color: white !important;
+}
+
+/* Pagination Styling */
+.pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+nz-pagination {
+  background: transparent !important;
+}
+
+nz-pagination .ant-pagination-item-active {
+  background-color: #ffccff !important;
+  border-color: #ff66ff !important;
+}
+
+nz-pagination .ant-pagination-item a {
+  color: white !important;
+}
