@@ -24,7 +24,6 @@ export class PostRoomComponent {
     price:['',Validators.required], 
   })}
 
-
   submitForm() {
     this.adminService.postRoomDetails(this.roomDetailsForm.value).subscribe(res => {
       this.message.success(`Room posted Successfully`, { nzDuration: 5000 });
