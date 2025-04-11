@@ -9,10 +9,10 @@ import { CustomerService } from '../../services/customer.service';
   styleUrl: './view-bookings.component.scss'
 })
 export class ViewBookingsComponent {
+  
   currentPage:any=1;
   total:any;
   bookings:any;
-
 
   constructor(private customerService:CustomerService,
     private message:NzMessageService
