@@ -1,4 +1,5 @@
 <div class="room-details-form-container">
+  
   <nz-form [formGroup]="updateRoomForm" nzLayout="vertical" class="room-details-form">
     <div class="form-title">Update Room Details</div>
 
@@ -20,6 +21,7 @@
       </nz-form-control>
     </nz-form-item>
 
+  
     <nz-form-item>
       <nz-form-control [nzSpan]="16" [nzOffset]="4">
         <button nz-button nzType="primary" [disabled]="updateRoomForm.invalid" (click)="submitForm()">Update</button>
