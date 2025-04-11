@@ -34,6 +34,7 @@ registerLocaleData(en);
     RegisterComponent,
     LoginComponent
   ],
+
   imports: [
     BrowserModule,
     AppRoutingModule, 
@@ -54,11 +55,13 @@ registerLocaleData(en);
     FormsModule,
     RouterModule
   ],
+
   providers: [
     provideNzI18n(en_US),
     provideAnimationsAsync(),
     provideHttpClient()
   ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }
