@@ -4,6 +4,7 @@
   <!-- Table Container with Fixed Height -->
   <div class="table-container">
     <nz-table #basicTable [nzBordered]="true" [nzData]="reservations" [nzShowPagination]="false">
+     
       <thead>
         <tr>
           <th nzWidth="15%">Room Name</th>
@@ -17,6 +18,7 @@
         </tr>
       </thead>
 
+     
       <tbody>
         <tr *ngFor="let reservation of reservations">
           <td>{{ reservation.roomName }}</td>
@@ -49,6 +51,7 @@
           </td>
         </tr>
 
+     
         <!-- Empty Rows to Maintain Table Height -->
         <ng-container *ngIf="reservations.length < 4">
           <tr *ngFor="let i of [].constructor(4 - reservations.length)">
@@ -68,5 +71,6 @@
       [nzDisabled]="total === 0" 
       (nzPageIndexChange)="pageIndexChange($event)">
     </nz-pagination>
+    
   </div>
 </div>
