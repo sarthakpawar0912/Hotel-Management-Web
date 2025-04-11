@@ -14,7 +14,6 @@ export class RegisterComponent {
 
   registerForm!: FormGroup;
 
-
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
