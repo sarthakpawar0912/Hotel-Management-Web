@@ -31,7 +31,6 @@ export class UpdateRoomComponent {
     this.getRoomsById();
   }
 
-
   submitForm() {
     if (this.updateRoomForm.valid) {
       console.log("Submitting data:", this.updateRoomForm.value);
