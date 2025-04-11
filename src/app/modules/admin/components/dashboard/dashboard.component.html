@@ -4,16 +4,13 @@
       nzType="primary"
       class="post-room-btn"
       routerLink="/admin/room"
-    >
-  
-      Post Room
+    > Post Room
     </button>
   </div>
   
   
   <!-- Loader while fetching rooms -->
   <nz-spin *ngIf="loading"></nz-spin>
-  
   
   <!-- No Rooms Message -->
   <div *ngIf="!loading && rooms.length === 0" class="no-rooms">
@@ -27,14 +24,12 @@
         style="width: 300px; margin: 16px"
         [nzActions]="[actionEdit, actionDelete]"
       >
-  
         <nz-skeleton [nzActive]="true" [nzLoading]="loading" [nzAvatar]="true">
           <nz-card-meta
             [nzAvatar]="avatarTemplate"
             nzTitle="{{ room.name }}"
             nzDescription="Type: {{ room.type }}"
           >
-  
           </nz-card-meta>
   
   
@@ -54,7 +49,6 @@
           nzSrc="https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4"
         ></nz-avatar>
       </ng-template>
-  
   
       <!-- Edit Action -->
       <ng-template #actionEdit>
