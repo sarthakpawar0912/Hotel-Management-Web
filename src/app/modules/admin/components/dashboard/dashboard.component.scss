@@ -103,6 +103,7 @@ nz-card-meta {
   z-index: 10;
 }
 
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .room-container {
@@ -111,11 +112,13 @@ nz-card-meta {
   }
 }
 
+
 @media (max-width: 768px) {
   .room-container {
     flex-direction: column;
     align-items: center;
   }
+
 
   .pagination {
     margin-top: 30px;
