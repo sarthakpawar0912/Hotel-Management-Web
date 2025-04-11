@@ -1,0 +1,97 @@
+<div class="center-form">
+    <button
+      nz-button
+      nzType="primary"
+      class="post-room-btn"
+      routerLink="/admin/room"
+    >
+  
+      Post Room
+    </button>
+  </div>
+  
+  
+  <!-- Loader while fetching rooms -->
+  <nz-spin *ngIf="loading"></nz-spin>
+  
+  
+  <!-- No Rooms Message -->
+  <div *ngIf="!loading && rooms.length === 0" class="no-rooms">
+    <p>No rooms available. Please add a new room.</p>
+  </div>
+  
+  
+  <div class="room-container" *ngIf="rooms.length > 0">
+    <div class="room-row" *ngFor="let room of rooms">
+      <nz-card
+        style="width: 300px; margin: 16px"
+        [nzActions]="[actionEdit, actionDelete]"
+      >
+  
+        <nz-skeleton [nzActive]="true" [nzLoading]="loading" [nzAvatar]="true">
+          <nz-card-meta
+            [nzAvatar]="avatarTemplate"
+            nzTitle="{{ room.name }}"
+            nzDescription="Type: {{ room.type }}"
+          >
+  
+          </nz-card-meta>
+  
+  
+          <nz-card-meta
+            style="margin-left: 49px"
+            nzDescription="Price: ₹{{ room.price }}"
+          >
+  
+          </nz-card-meta>
+        </nz-skeleton>
+      </nz-card>
+  
+  
+      <!-- Avatar Template -->
+      <ng-template #avatarTemplate>
+        <nz-avatar
+          nzSrc="https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4"
+        ></nz-avatar>
+      </ng-template>
+  
+  
+      <!-- Edit Action -->
+      <ng-template #actionEdit>
+        <span
+          nz-icon
+          nzType="edit"
+          [nzTheme]="'twotone'"
+          class="icon"
+          routerLink="/admin/room/{{ room.id }}/edit"
+        ></span>
+      </ng-template>
+  
+  
+      <!-- Delete Action -->
+      <ng-template #actionDelete>
+        <span
+        nz-icon
+        nzType="delete"
+        [nzTheme]="'twotone'"
+        class="icon"
+        [nzTwotoneColor]="'#FF0000'"
+        (click)="showConfirm(room.id)" 
+      ></span>
+      
+      </ng-template>
+    </div>
+   
+    
+    <!-- Pagination -->
+    <div class="pagination">
+      <nz-pagination
+      [nzPageIndex]="currentpage"
+      [nzTotal]="total"
+      [nzPageSize]="10"
+      (nzPageIndexChange)="pageIndexChange($event)" 
+    ></nz-pagination>
+    
+    </div>
+  </div>
+  

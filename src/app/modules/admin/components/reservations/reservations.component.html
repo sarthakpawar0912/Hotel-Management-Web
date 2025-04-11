@@ -1,0 +1,72 @@
+<div class="center-form">
+  <h1 class="page-title">Reservations</h1>
+
+  <!-- Table Container with Fixed Height -->
+  <div class="table-container">
+    <nz-table #basicTable [nzBordered]="true" [nzData]="reservations" [nzShowPagination]="false">
+      <thead>
+        <tr>
+          <th nzWidth="15%">Room Name</th>
+          <th nzWidth="15%">Room Type</th>
+          <th nzWidth="15%">Check In</th>
+          <th nzWidth="15%">Check Out</th>
+          <th nzWidth="10%">Price</th>
+          <th nzWidth="15%">Username</th>
+          <th nzWidth="10%">Status</th>
+          <th nzWidth="10%">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let reservation of reservations">
+          <td>{{ reservation.roomName }}</td>
+          <td>{{ reservation.roomType }}</td>
+          <td>{{ reservation.checkInDate }}</td>
+          <td>{{ reservation.checkOutDate }}</td>
+          <td>₹{{ reservation.price }}</td>
+          <td>{{ reservation.username }}</td>
+          <td>
+            <nz-tag *ngIf="reservation.reservationStatus === 'PENDING'" nzColor="processing">
+              <span nz-icon nzType="sync" nzSpin></span> Pending
+            </nz-tag>
+
+            <nz-tag *ngIf="reservation.reservationStatus === 'APPROVED'" nzColor="success">
+              <span nz-icon nzType="check-circle"></span> Approved
+            </nz-tag>
+
+            <nz-tag *ngIf="reservation.reservationStatus === 'REJECTED'" nzColor="error">
+              <span nz-icon nzType="close-circle"></span> Rejected
+            </nz-tag>
+          </td>
+          <td>
+            <span *ngIf="reservation.reservationStatus == 'PENDING'">
+              <span nz-icon nzType="check-circle" [nzTwotoneColor]="'#52c41a'" class="icon"
+                (click)="changeReservationStatus(reservation.id, 'Approve')"></span>
+
+              <span nz-icon nzType="close-circle" [nzTwotoneColor]="'#FF0000'" class="icon"
+                (click)="changeReservationStatus(reservation.id, 'REJECT')"></span>
+            </span>
+          </td>
+        </tr>
+
+        <!-- Empty Rows to Maintain Table Height -->
+        <ng-container *ngIf="reservations.length < 4">
+          <tr *ngFor="let i of [].constructor(4 - reservations.length)">
+            <td colspan="8" class="empty-row"></td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <nz-pagination 
+      [nzPageIndex]="currentPage" 
+      [nzTotal]="total" 
+      [nzPageSize]="4" 
+      [nzDisabled]="total === 0" 
+      (nzPageIndexChange)="pageIndexChange($event)">
+    </nz-pagination>
+  </div>
+</div>

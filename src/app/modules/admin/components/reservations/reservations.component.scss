@@ -1,0 +1,102 @@
+/* Centered Form Styling */
+.center-form {
+  max-width: 90%;
+  margin: 40px auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #6a0572, #a4508b);
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Page Title */
+.page-title {
+  text-align: center;
+  color: #ffccff;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Table Container (Ensures Consistent Height) */
+.table-container {
+  width: 100%;
+  min-height: 350px; /* Fixed Height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Table Styling */
+nz-table {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+
+th, td {
+  text-align: center;
+  padding: 10px;
+}
+
+td {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Empty Row Styling to Maintain Layout */
+.empty-row {
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Status Tags Styling */
+nz-tag {
+  font-weight: bold;
+}
+
+/* Status Tag Colors */
+nz-tag[nzColor="processing"] {
+  background: #ffcc00 !important;
+  color: black !important;
+}
+
+nz-tag[nzColor="success"] {
+  background: #00cc66 !important;
+  color: white !important;
+}
+
+nz-tag[nzColor="error"] {
+  background: #ff3333 !important;
+  color: white !important;
+}
+
+/* Icons for Action */
+.icon {
+  cursor: pointer;
+  font-size: 18px;
+  margin: 0 5px;
+}
+
+/* Pagination Styling */
+.pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+nz-pagination {
+  display: inline-block;
+}
+
+nz-pagination .ant-pagination-item-active {
+  background-color: #ffccff !important;
+  border-color: #ff66ff !important;
+}
+
+nz-pagination .ant-pagination-item a {
+  color: white !important;
+}

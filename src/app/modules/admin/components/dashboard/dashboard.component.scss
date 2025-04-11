@@ -1,0 +1,127 @@
+/* Center Form */
+.center-form {
+  text-align: center;
+  margin: 30px 0;
+}
+
+/* Post Room Button - Centered & More Attractive */
+.post-room-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 50px;
+  background: linear-gradient(135deg, #6a1b9a, #ab47bc);
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 0 auto; /* Ensures centering */
+}
+
+.post-room-btn:hover {
+  background: linear-gradient(135deg, #4a148c, #8e24aa);
+  transform: scale(1.05);
+}
+
+/* Room Details Container - Bigger and Broader */
+.room-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 50px;
+  min-height: calc(100vh - 250px); /* Ensures proper space for content */
+  max-width: 1400px; /* Broader container */
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Room Row - Proper Width Handling */
+.room-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Room Card Styling */
+nz-card {
+  width: 350px;
+  border-radius: 12px;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease-in-out;
+}
+
+nz-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Card Meta Information */
+nz-card-meta {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Icons */
+.icon {
+  cursor: pointer;
+  font-size: 22px;
+  transition: transform 0.2s;
+}
+
+.icon:hover {
+  transform: scale(1.2);
+}
+
+/* Pagination - Positioned Below Room Details */
+.pagination {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  background-color: #fff;
+  position: relative;
+  margin-top: 50px;
+}
+
+/* Fixed Footer */
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #4a148c;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-size: 16px;
+  z-index: 10;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .room-container {
+    padding: 30px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .room-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pagination {
+    margin-top: 30px;
+  }
+
+  .footer {
+    position: relative;
+  }
+}
