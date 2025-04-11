@@ -182,13 +182,15 @@ export class DemoNgZorroAntdModule{}
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-isClientLoggedIn: any;
-isCompanyLoggedIn: any;
-isAdminLoggedIn: any;
-isCustomerLoggedIn: any;
-logout() {
-throw new Error('Method not implemented.');
-}
+  
+  isClientLoggedIn: any;
+  isCompanyLoggedIn: any;
+  isAdminLoggedIn: any;
+  isCustomerLoggedIn: any;
+  
+  logout() {
+  throw new Error('Method not implemented.');
+  }
   isCollapsed = false;
 
 }
