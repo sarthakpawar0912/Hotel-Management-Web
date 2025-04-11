@@ -30,8 +30,6 @@ export class ViewBookingsComponent {
     })
   }
 
-
-
   pageIndexChange(value:any){
     this.currentPage=value;
     this.getBookings();
