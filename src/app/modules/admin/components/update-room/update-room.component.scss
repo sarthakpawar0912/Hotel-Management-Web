@@ -84,6 +84,7 @@ input[nz-input]:focus {
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
 }
 
+
 /* Update Button */
 button[nz-button] {
   width: 100%;
@@ -98,10 +99,12 @@ button[nz-button] {
   cursor: pointer;
 }
 
+
 button[nz-button]:hover {
   background: #ffb74d;
   box-shadow: 0 4px 10px rgba(255, 152, 0, 0.4);
 }
+
 
 button[nz-button]:disabled {
   background: #b39ddb;
@@ -119,10 +122,12 @@ button[nz-button]:disabled {
     font-size: 20px;
   }
 
+
   button[nz-button] {
     height: 45px;
     font-size: 15px;
   }
+
 
   .footer {
     font-size: 12px;
