@@ -15,7 +15,6 @@ export class DashboardComponent {
   rooms: any[] = [];
   total = 0;
   loading = false;
-
   
   constructor(
     private adminService: AdminService,
@@ -24,7 +23,6 @@ export class DashboardComponent {
   ) {
     this.getRooms();
   }
-
 
   getRooms() {
     this.adminService.getRooms(this.currentpage - 1).subscribe(res => {
@@ -43,14 +41,12 @@ export class DashboardComponent {
     });
   }
   
-
   pageIndexChange(value: any) {
     this.currentpage = value;
     this.getRooms();
   }
 
-
-  deleteRoom(roomId: number) {
+   deleteRoom(roomId: number) {
     this.adminService.deleteRoom(roomId).subscribe(res => {
       this.message.success(`Room Deleted Successfully`, { nzDuration: 5000 });
       this.getRooms(); // ✅ Refresh list after deletion
@@ -58,7 +54,6 @@ export class DashboardComponent {
       this.message.error(`${error.error}`, { nzDuration: 5000 });
     });
   }
-
 
   showConfirm(roomId: number) {
     this.modalService.confirm({
@@ -70,5 +65,4 @@ export class DashboardComponent {
     });
   }
 
- 
 }
