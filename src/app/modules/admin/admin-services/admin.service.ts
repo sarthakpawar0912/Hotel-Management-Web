@@ -27,7 +27,6 @@ export class AdminService {
     });
   }
 
-  
   deleteRoom(roomId:number):Observable<any>{
     return this.http.delete(BASIC_URL+`api/admin/room/${roomId}`, {
       headers: this.createAuthorizationHeader(),
@@ -60,7 +59,6 @@ export class AdminService {
     });
   }
 
-  
   createAuthorizationHeader(){
 
     let authHeaders: HttpHeaders = new HttpHeaders();
