@@ -39,7 +39,7 @@
         <span nz-icon nzType="logout"></span>
         <span><strong>Logout</strong></span>
       </li>
-      
+
     </ul>
   </nz-sider>
 
@@ -47,18 +47,22 @@
   <nz-sider nzCollapsible nzWidth="200px" *ngIf="isCustomerLoggedIn">
     <div class="logo"></div>
     <ul nz-menu nzTheme="dark" nzMode="inline">
+    
       <li nz-menu-item routerLink="/customer/rooms">
         <span nz-icon nzType="apartment"></span>
         <span><strong>Rooms</strong></span>
       </li>
+    
       <li nz-menu-item routerLink="/customer/bookings">
         <span nz-icon nzType="pull-request"></span>
         <span><strong>Bookings</strong></span>
       </li>
+    
       <li nz-menu-item (click)="logout()">
         <span nz-icon nzType="logout"></span>
         <span><strong>Logout</strong></span>
       </li>
+
     </ul>
   </nz-sider>
 
@@ -71,4 +75,5 @@
       <p>© 2025 Hotel Management System</p>
     </nz-footer>
   </nz-layout>
+  
 </nz-layout>
