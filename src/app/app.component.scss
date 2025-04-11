@@ -18,6 +18,7 @@ nz-sider {
   color: #fff;
   box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.2);
 
+
   .logo {
     height: 64px;
     background: rgba(255, 255, 255, 0.2);
@@ -25,9 +26,11 @@ nz-sider {
     border-radius: 10px;
   }
 
+
   ul[nz-menu] {
     background: transparent;
     padding: 0;
+
 
     li[nz-menu-item] {
       color: #fff;
@@ -50,6 +53,7 @@ nz-sider {
   }
 }
 
+
 // Content styles
 nz-content {
   background: #f5f5f5;
@@ -60,6 +64,7 @@ nz-content {
   align-items: center;
   width: 100%;
 }
+
 
 // Footer styles
 nz-footer {
