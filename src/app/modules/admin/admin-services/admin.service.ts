@@ -11,11 +11,9 @@ const BASIC_URL="http://localhost:8080/";
 
 export class AdminService {
 
-
   constructor(private http: HttpClient,
     private userStorage:UserStorageService
   ){}
-
 
   postRoomDetails(roomDto: any): Observable<any> {
     return this.http.post(BASIC_URL + 'api/admin/room', roomDto, {
