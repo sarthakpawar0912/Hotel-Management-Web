@@ -8,7 +8,10 @@ import { UserStorageService } from './auth/services/storage/user-storage.service
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent { isCollapsed = false;
+
+export class AppComponent { 
+  
+  isCollapsed = false;
   isCustomerLoggedIn: boolean = false;
   isAdminLoggedIn: boolean = false;
 
@@ -21,8 +24,7 @@ export class AppComponent { isCollapsed = false;
   ngOnInit() {
     this.updateLoginStatus();
 
-    // 🔹 Subscribe to login state changes to update UI dynamically
-    this.userStorage.user$.subscribe(user => {
+     this.userStorage.user$.subscribe(user => {
       this.isAdminLoggedIn = user?.role === 'ADMIN';
       this.isCustomerLoggedIn = user?.role === 'CUSTOMER';
       this.cdr.detectChanges(); // 🔹 Force UI refresh
@@ -47,4 +49,5 @@ export class AppComponent { isCollapsed = false;
       window.location.reload(); // 🔹 Ensures complete logout and UI reset
     });
   }
+  
 }
