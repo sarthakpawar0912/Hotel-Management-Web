@@ -11,12 +11,12 @@ import { CustomerService } from '../../services/customer.service';
   styleUrl: './rooms.component.scss'
 })
 export class RoomsComponent {
+ 
   currentpage = 1;
   rooms: any[] = [];
   total = 0;
   loading = false;
   isVisibleMiddle: boolean = false;
-
   checkInDate: Date | null = null;
   checkOutDate: Date | null = null;
   id!: number;
@@ -125,4 +125,5 @@ export class RoomsComponent {
     this.checkOutDate = null;
     this.isVisibleMiddle = true;
   }
+  
 }
