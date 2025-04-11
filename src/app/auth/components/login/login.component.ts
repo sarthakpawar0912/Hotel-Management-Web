@@ -12,10 +12,10 @@ import { UserStorageService } from '../../services/storage/user-storage.service'
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+ 
   loginForm!: FormGroup;
   isAdminLoggedIn: boolean = false;
   isCustomerLoggedIn: boolean = false;
-
 
   constructor(
     private fb: FormBuilder,
@@ -25,7 +25,6 @@ export class LoginComponent {
     private userStorage: UserStorageService,
     private cdr: ChangeDetectorRef
   ) {}
-
 
 
   ngOnInit() {
@@ -42,13 +41,11 @@ export class LoginComponent {
     });
   }
 
-
   submitForm() {
     if (this.loginForm.invalid) {
       this.message.error('Please fill in all required fields.');
       return;
     }
-  
 
     this.authService.login(this.loginForm.value).subscribe(
       res => {
@@ -75,4 +72,5 @@ export class LoginComponent {
       }
     );
   }
+  
 }
