@@ -20,11 +20,9 @@ export class ViewBookingsComponent {
     this.getBookings();
   }
 
-
   getBookings(){
     this.customerService.getMyBookings(this.currentPage-1).subscribe(res=>{
       console.log(res);
-
       this.bookings=res.reservationDtoList;
       this.total=res.totalPages*5;
     },error=>{
