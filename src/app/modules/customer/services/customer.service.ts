@@ -11,13 +11,10 @@ const BASIC_URL="http://localhost:8080/";
 })
 export class CustomerService {
 
-
   constructor(private http:HttpClient,
       private userStorage:UserStorageService
   ) { }
 
-
-  
     getRooms(pageNumber: number): Observable<any> {
       return this.http.get(`${BASIC_URL}api/customer/rooms/${pageNumber}`, {
         headers: this.createAuthorizationHeader(),
@@ -30,7 +27,6 @@ export class CustomerService {
       });
     }
 
-
     getMyBookings(pageNumber: number): Observable<any> {
       const userId =this.userStorage.getUserId(); // ✅ Use injected instance
       return this.http.get(`${BASIC_URL}api/customer/bookings/${userId}/${pageNumber}`, {
@@ -38,9 +34,6 @@ export class CustomerService {
       });
     }
     
-
-
-
     createAuthorizationHeader(){
     
         
