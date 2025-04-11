@@ -11,12 +11,10 @@ export class AuthService {
 
   constructor(private http:HttpClient) { }
 
-
   register(signupRequest:any):Observable<any>{
     return this.http.post(BASIC_URL+"api/auth/signup",signupRequest);
   }
 
-  
   login(loginRequest:any) :Observable<any>{
     return this.http.post(BASIC_URL+"api/auth/login",loginRequest);
   }
