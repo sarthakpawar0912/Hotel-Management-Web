@@ -1,6 +1,7 @@
 <!-- Loader -->
 <nz-spin *ngIf="loading"></nz-spin>
 
+
 <!-- No Rooms Message -->
 <div *ngIf="!loading && rooms.length === 0" class="no-rooms">
   <p>No rooms available.</p>
@@ -8,6 +9,7 @@
 
 <!-- Room Wrapper (Fixes Pagination Issue) -->
 <div class="room-wrapper">
+ 
   <!-- Room List -->
   <div class="room-container" *ngIf="rooms.length > 0">
     <div class="room-row" *ngFor="let room of rooms">
@@ -63,5 +65,6 @@
         [nzDisabledDate]="disableCheckOutDate">
       </nz-date-picker>
     </div>
+    
   </ng-container>
 </nz-modal>
