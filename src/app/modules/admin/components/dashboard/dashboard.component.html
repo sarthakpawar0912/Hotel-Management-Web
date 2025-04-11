@@ -31,8 +31,7 @@
             nzDescription="Type: {{ room.type }}"
           >
           </nz-card-meta>
-  
-  
+
           <nz-card-meta
             style="margin-left: 49px"
             nzDescription="Price: ₹{{ room.price }}"
@@ -41,8 +40,7 @@
           </nz-card-meta>
         </nz-skeleton>
       </nz-card>
-  
-  
+
       <!-- Avatar Template -->
       <ng-template #avatarTemplate>
         <nz-avatar
@@ -60,8 +58,7 @@
           routerLink="/admin/room/{{ room.id }}/edit"
         ></span>
       </ng-template>
-  
-  
+
       <!-- Delete Action -->
       <ng-template #actionDelete>
         <span
@@ -76,7 +73,6 @@
       </ng-template>
     </div>
    
-    
     <!-- Pagination -->
     <div class="pagination">
       <nz-pagination
