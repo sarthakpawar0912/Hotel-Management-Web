@@ -1,0 +1,86 @@
+<!-- Page Header -->
+<div class="page-header">
+  <div class="header-content">
+    <h1>
+      <span nz-icon nzType="bell" nzTheme="fill"></span>
+      Notifications
+    </h1>
+    <p>Stay updated with your booking activities</p>
+  </div>
+  <div class="header-actions" *ngIf="unreadCount > 0">
+    <nz-badge [nzCount]="unreadCount" nzOverflowCount="99">
+      <button nz-button nzType="primary" nzGhost (click)="markAllAsRead()">
+        <span nz-icon nzType="check"></span> Mark all as read
+      </button>
+    </nz-badge>
+  </div>
+</div>
+
+<div class="notifications-container">
+  <nz-spin [nzSpinning]="loading">
+    <!-- Stats Bar -->
+    <div class="stats-bar" *ngIf="!loading && notifications.length > 0">
+      <div class="stat">
+        <span class="value">{{ notifications.length }}</span>
+        <span class="label">Total</span>
+      </div>
+      <div class="stat unread">
+        <span class="value">{{ unreadCount }}</span>
+        <span class="label">Unread</span>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && notifications.length === 0" class="empty-state">
+      <nz-empty [nzNotFoundImage]="emptyImage" [nzNotFoundContent]="emptyContent">
+        <ng-template #emptyImage>
+          <span nz-icon nzType="bell" class="empty-icon"></span>
+        </ng-template>
+        <ng-template #emptyContent>
+          <div class="empty-text">
+            <h3>No notifications yet</h3>
+            <p>You'll receive updates about your bookings, payments, and promotions here</p>
+          </div>
+        </ng-template>
+      </nz-empty>
+    </div>
+
+    <!-- Notifications List -->
+    <div class="notifications-list" *ngIf="notifications.length > 0">
+      <div *ngFor="let notification of notifications"
+           class="notification-card"
+           [class.unread]="!notification.isRead"
+           (click)="!notification.isRead && markAsRead(notification.id)">
+
+        <div class="notification-icon" [ngClass]="getNotificationColor(notification.notificationType)">
+          <span nz-icon [nzType]="getNotificationIcon(notification.notificationType)" nzTheme="fill"></span>
+        </div>
+
+        <div class="notification-content">
+          <div class="notification-header">
+            <span class="notification-title">{{ notification.title }}</span>
+            <nz-tag *ngIf="!notification.isRead" nzColor="blue" class="new-badge">New</nz-tag>
+          </div>
+          <p class="notification-message">{{ notification.message }}</p>
+          <div class="notification-meta">
+            <span class="time">
+              <span nz-icon nzType="clock-circle"></span>
+              {{ notification.createdAt | date:'dd MMM yyyy, h:mm a' }}
+            </span>
+            <nz-tag [nzColor]="getTypeTagColor(notification.notificationType)" [nzBordered]="false" class="type-tag">
+              {{ formatNotificationType(notification.notificationType) }}
+            </nz-tag>
+          </div>
+        </div>
+
+        <div class="notification-action" *ngIf="!notification.isRead">
+          <button nz-button nzType="text" nzSize="small"
+                  nz-tooltip nzTooltipTitle="Mark as read"
+                  (click)="markAsRead(notification.id); $event.stopPropagation()">
+            <span nz-icon nzType="check"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nz-spin>
+</div>

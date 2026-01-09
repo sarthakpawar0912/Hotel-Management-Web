@@ -1,0 +1,52 @@
+<div class="customer-layout">
+  <!-- SIDEBAR - Fixed, Always Visible, No Collapse -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span nz-icon nzType="home" nzTheme="outline"></span>
+      <span class="logo-text">Customer Portal</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul nz-menu nzTheme="dark" nzMode="inline">
+        <li nz-menu-item routerLink="/customer/rooms" routerLinkActive="ant-menu-item-selected">
+          <span nz-icon nzType="home"></span>
+          <span>Browse Rooms</span>
+        </li>
+        <li nz-menu-item routerLink="/customer/bookings" routerLinkActive="ant-menu-item-selected">
+          <span nz-icon nzType="calendar"></span>
+          <span>My Bookings</span>
+        </li>
+        <li nz-menu-item routerLink="/customer/reviews" routerLinkActive="ant-menu-item-selected">
+          <span nz-icon nzType="star"></span>
+          <span>My Reviews</span>
+        </li>
+        <li nz-menu-item routerLink="/customer/notifications" routerLinkActive="ant-menu-item-selected">
+          <nz-badge [nzCount]="notificationCount" [nzOverflowCount]="9" class="notification-badge">
+            <span nz-icon nzType="bell"></span>
+          </nz-badge>
+          <span>Notifications</span>
+        </li>
+        <li nz-menu-item routerLink="/customer/promotions" routerLinkActive="ant-menu-item-selected">
+          <span nz-icon nzType="gift"></span>
+          <span>Promotions</span>
+        </li>
+        <li nz-menu-item (click)="logout()" class="logout-item">
+          <span nz-icon nzType="logout"></span>
+          <span>Logout</span>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT - Always starts after sidebar -->
+  <main class="main-content">
+    <div class="content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+      <p>Hotel Management System &copy; {{ currentYear }}</p>
+    </footer>
+  </main>
+</div>

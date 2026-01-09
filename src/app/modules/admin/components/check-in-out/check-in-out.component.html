@@ -1,0 +1,139 @@
+<div class="check-in-out-container">
+  <h2>Check-In / Check-Out Management</h2>
+
+  <div class="stats-cards" nz-row [nzGutter]="[16, 16]">
+    <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="6" [nzLg]="6">
+      <nz-card>
+        <nz-statistic [nzValue]="dailySummary.checkInsExpected || 0" [nzTitle]="'Expected Check-Ins'"
+                      [nzPrefix]="checkInIcon" [nzValueStyle]="{ color: '#1890ff' }"></nz-statistic>
+        <ng-template #checkInIcon><span nz-icon nzType="login"></span></ng-template>
+      </nz-card>
+    </div>
+    <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="6" [nzLg]="6">
+      <nz-card>
+        <nz-statistic [nzValue]="dailySummary.checkOutsExpected || 0" [nzTitle]="'Expected Check-Outs'"
+                      [nzPrefix]="checkOutIcon" [nzValueStyle]="{ color: '#fa8c16' }"></nz-statistic>
+        <ng-template #checkOutIcon><span nz-icon nzType="logout"></span></ng-template>
+      </nz-card>
+    </div>
+    <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="6" [nzLg]="6">
+      <nz-card>
+        <nz-statistic [nzValue]="occupancyStatus.occupiedRooms || 0" [nzTitle]="'Occupied Rooms'"
+                      [nzSuffix]="'/ ' + (occupancyStatus.totalRooms || 0)"
+                      [nzValueStyle]="{ color: '#6a1b9a' }"></nz-statistic>
+      </nz-card>
+    </div>
+    <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="6" [nzLg]="6">
+      <nz-card>
+        <nz-statistic [nzValue]="(occupancyStatus.occupancyRate || 0) + '%'" [nzTitle]="'Occupancy Rate'"
+                      [nzValueStyle]="{ color: occupancyStatus.occupancyRate >= 70 ? '#52c41a' : occupancyStatus.occupancyRate >= 40 ? '#faad14' : '#ff4d4f' }"></nz-statistic>
+      </nz-card>
+    </div>
+  </div>
+
+  <nz-tabset [(nzSelectedIndex)]="activeTab">
+    <nz-tab nzTitle="Today's Check-Ins">
+      <nz-table #checkInTable [nzData]="todayCheckIns" [nzLoading]="loading">
+        <thead>
+          <tr>
+            <th>Reservation ID</th>
+            <th>Guest</th>
+            <th>Room</th>
+            <th>Check-In Date</th>
+            <th>Check-Out Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reservation of checkInTable.data">
+            <td>#{{ reservation.id }}</td>
+            <td>{{ reservation.userName }}</td>
+            <td>{{ reservation.roomName }} ({{ reservation.roomType }})</td>
+            <td>{{ reservation.checkInDate }}</td>
+            <td>{{ reservation.checkOutDate }}</td>
+            <td><nz-tag [nzColor]="getStatusColor(reservation.reservationStatus)">{{ reservation.reservationStatus }}</nz-tag></td>
+            <td>
+              <button nz-button nzType="primary" nzSize="small"
+                      [disabled]="reservation.reservationStatus !== 'APPROVED'"
+                      (click)="checkIn(reservation.id)"
+                      nz-tooltip [nzTooltipTitle]="reservation.reservationStatus !== 'APPROVED' ? 'Only APPROVED reservations can be checked in' : 'Check in guest'">
+                <span nz-icon nzType="login"></span> Check In
+              </button>
+              <button nz-button nzType="default" nzSize="small" nzDanger style="margin-left: 8px;"
+                      [disabled]="reservation.reservationStatus !== 'APPROVED'"
+                      (click)="markNoShow(reservation.id)"
+                      nz-tooltip [nzTooltipTitle]="reservation.reservationStatus !== 'APPROVED' ? 'Only APPROVED reservations can be marked as no-show' : 'Mark as no-show'">
+                No Show
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <nz-empty *ngIf="todayCheckIns.length === 0 && !loading" nzNotFoundContent="No check-ins scheduled for today"></nz-empty>
+    </nz-tab>
+
+    <nz-tab nzTitle="Today's Check-Outs">
+      <nz-table #checkOutTable [nzData]="todayCheckOuts" [nzLoading]="loading">
+        <thead>
+          <tr>
+            <th>Reservation ID</th>
+            <th>Guest</th>
+            <th>Room</th>
+            <th>Check-In Date</th>
+            <th>Check-Out Date</th>
+            <th>Amount</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reservation of checkOutTable.data">
+            <td>#{{ reservation.id }}</td>
+            <td>{{ reservation.userName }}</td>
+            <td>{{ reservation.roomName }} ({{ reservation.roomType }})</td>
+            <td>{{ reservation.checkInDate }}</td>
+            <td>{{ reservation.checkOutDate }}</td>
+            <td>{{ reservation.price | currency:'INR' }}</td>
+            <td>
+              <button nz-button nzType="primary" nzSize="small"
+                      [disabled]="reservation.reservationStatus !== 'CHECKED_IN'"
+                      (click)="checkOut(reservation.id)"
+                      nz-tooltip [nzTooltipTitle]="reservation.reservationStatus !== 'CHECKED_IN' ? 'Only CHECKED_IN guests can be checked out' : 'Check out guest'">
+                <span nz-icon nzType="logout"></span> Check Out
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <nz-empty *ngIf="todayCheckOuts.length === 0 && !loading" nzNotFoundContent="No check-outs scheduled for today"></nz-empty>
+    </nz-tab>
+
+    <nz-tab nzTitle="Currently Checked In">
+      <nz-table #checkedInTable [nzData]="currentlyCheckedIn" [nzLoading]="loading">
+        <thead>
+          <tr>
+            <th>Reservation ID</th>
+            <th>Guest</th>
+            <th>Room</th>
+            <th>Check-In Date</th>
+            <th>Expected Check-Out</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reservation of checkedInTable.data">
+            <td>#{{ reservation.id }}</td>
+            <td>{{ reservation.userName }}</td>
+            <td>{{ reservation.roomName }} ({{ reservation.roomType }})</td>
+            <td>{{ reservation.checkInDate }}</td>
+            <td>{{ reservation.checkOutDate }}</td>
+            <td>{{ reservation.price | currency:'INR' }}</td>
+            <td><nz-tag nzColor="green">Checked In</nz-tag></td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <nz-empty *ngIf="currentlyCheckedIn.length === 0 && !loading" nzNotFoundContent="No guests currently checked in"></nz-empty>
+    </nz-tab>
+  </nz-tabset>
+</div>

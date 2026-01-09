@@ -1,0 +1,133 @@
+<div class="payments-container">
+  <!-- Header -->
+  <div class="page-header">
+    <h2>Payments Management</h2>
+    <div class="header-stats">
+      <nz-tag nzColor="blue">Total: {{ getTotalStats().total }}</nz-tag>
+      <nz-tag nzColor="green">Revenue: {{ getTotalStats().totalAmount | currency:'INR':'symbol':'1.0-0' }}</nz-tag>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-section">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="6" [nzLg]="6">
+        <nz-card class="stat-card">
+          <nz-statistic [nzValue]="getTotalStats().total" [nzTitle]="'Total Transactions'"
+                        [nzPrefix]="totalIcon" [nzValueStyle]="{ color: '#6a1b9a' }"></nz-statistic>
+          <ng-template #totalIcon><span nz-icon nzType="transaction"></span></ng-template>
+        </nz-card>
+      </div>
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="6" [nzLg]="6">
+        <nz-card class="stat-card">
+          <nz-statistic [nzValue]="getTotalStats().completed" [nzTitle]="'Completed'"
+                        [nzPrefix]="completedIcon" [nzValueStyle]="{ color: '#52c41a' }"></nz-statistic>
+          <ng-template #completedIcon><span nz-icon nzType="check-circle"></span></ng-template>
+        </nz-card>
+      </div>
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="6" [nzLg]="6">
+        <nz-card class="stat-card">
+          <nz-statistic [nzValue]="getTotalStats().pending" [nzTitle]="'Pending'"
+                        [nzPrefix]="pendingIcon" [nzValueStyle]="{ color: '#faad14' }"></nz-statistic>
+          <ng-template #pendingIcon><span nz-icon nzType="clock-circle"></span></ng-template>
+        </nz-card>
+      </div>
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="6" [nzLg]="6">
+        <nz-card class="stat-card">
+          <nz-statistic [nzValue]="getTotalStats().totalAmount" [nzTitle]="'Total Revenue'"
+                        [nzPrefix]="'₹'" [nzValueStyle]="{ color: '#1890ff' }"></nz-statistic>
+        </nz-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <div nz-row [nzGutter]="[16, 16]" nzAlign="middle">
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+        <nz-select [(ngModel)]="filterStatus" nzPlaceHolder="Filter by Status" style="width: 100%;" (ngModelChange)="applyFilter()">
+          <nz-option nzValue="all" nzLabel="All Payments"></nz-option>
+          <nz-option nzValue="COMPLETED" nzLabel="Completed"></nz-option>
+          <nz-option nzValue="PENDING" nzLabel="Pending"></nz-option>
+          <nz-option nzValue="FAILED" nzLabel="Failed"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+        <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onDateRangeChange()" style="width: 100%;"
+                         [nzFormat]="'dd MMM yyyy'"></nz-range-picker>
+      </div>
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="4">
+        <button nz-button (click)="clearFilters()" *ngIf="filterStatus !== 'all' || searchText">
+          <span nz-icon nzType="close"></span> Clear
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper">
+    <nz-spin [nzSpinning]="loading">
+      <nz-table #paymentTable [nzData]="filteredPayments" [nzPageSize]="10" [nzShowPagination]="true"
+                [nzBordered]="false" [nzSize]="'middle'" [nzNoResult]="noDataTpl">
+        <thead>
+          <tr>
+            <th>Transaction ID</th>
+            <th nzWidth="100px">Reservation</th>
+            <th>User</th>
+            <th nzWidth="120px">Amount</th>
+            <th nzWidth="140px">Tax Details</th>
+            <th nzWidth="100px">Method</th>
+            <th nzWidth="100px">Status</th>
+            <th nzWidth="140px">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let payment of paymentTable.data">
+            <td>
+              <div class="transaction-info">
+                <span class="transaction-id">{{ payment.razorpayPaymentId || payment.receiptNumber || 'N/A' }}</span>
+                <span class="order-id" *ngIf="payment.razorpayOrderId">{{ payment.razorpayOrderId }}</span>
+              </div>
+            </td>
+            <td>
+              <a class="reservation-link">#{{ payment.reservationId }}</a>
+            </td>
+            <td>
+              <span class="user-name">{{ payment.userName }}</span>
+            </td>
+            <td>
+              <strong class="amount">{{ payment.totalAmount | currency:'INR':'symbol':'1.0-0' }}</strong>
+            </td>
+            <td>
+              <div class="tax-info">
+                <span>CGST: {{ payment.cgst | currency:'INR':'symbol':'1.0-0' }}</span>
+                <span>SGST: {{ payment.sgst | currency:'INR':'symbol':'1.0-0' }}</span>
+              </div>
+            </td>
+            <td>
+              <nz-tag [nzColor]="getMethodColor(payment.paymentMethod)">
+                <span nz-icon [nzType]="getMethodIcon(payment.paymentMethod)"></span>
+                {{ payment.paymentMethod || 'Online' }}
+              </nz-tag>
+            </td>
+            <td>
+              <nz-tag [nzColor]="getStatusColor(payment.paymentStatus)">
+                <span nz-icon [nzType]="getStatusIcon(payment.paymentStatus)"></span>
+                {{ payment.paymentStatus }}
+              </nz-tag>
+            </td>
+            <td>
+              <div class="date-info">
+                <span class="date">{{ payment.paidAt | date:'dd MMM yyyy' }}</span>
+                <span class="time">{{ payment.paidAt | date:'HH:mm' }}</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <ng-template #noDataTpl>
+        <nz-empty [nzNotFoundContent]="'No payments found'"></nz-empty>
+      </ng-template>
+    </nz-spin>
+  </div>
+</div>

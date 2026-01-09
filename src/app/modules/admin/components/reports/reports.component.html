@@ -1,0 +1,172 @@
+<div class="reports-container">
+  <div class="header">
+    <h2>Reports & Analytics</h2>
+    <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onDateChange()"></nz-range-picker>
+  </div>
+
+  <!-- Dashboard Summary Cards -->
+  <div class="summary-cards" nz-row [nzGutter]="16">
+    <div nz-col [nzSpan]="6">
+      <nz-card>
+        <nz-statistic [nzValue]="dashboardSummary.totalRooms || 0" [nzTitle]="'Total Rooms'"
+                      [nzPrefix]="roomIcon"></nz-statistic>
+        <ng-template #roomIcon><span nz-icon nzType="home"></span></ng-template>
+        <div class="sub-stat">{{ dashboardSummary.availableRooms || 0 }} available</div>
+      </nz-card>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <nz-card>
+        <nz-statistic [nzValue]="dashboardSummary.totalBookings || 0" [nzTitle]="'Total Bookings'"
+                      [nzPrefix]="bookingIcon"></nz-statistic>
+        <ng-template #bookingIcon><span nz-icon nzType="calendar"></span></ng-template>
+        <div class="sub-stat">{{ dashboardSummary.pendingBookings || 0 }} pending</div>
+      </nz-card>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <nz-card>
+        <nz-statistic [nzValue]="formatCurrency(dashboardSummary.totalRevenue || 0)" [nzTitle]="'Total Revenue'"></nz-statistic>
+        <div class="sub-stat">{{ formatCurrency(dashboardSummary.monthlyRevenue || 0) }} this month</div>
+      </nz-card>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <nz-card>
+        <nz-statistic [nzValue]="(dashboardSummary.occupancyRate || 0) + '%'" [nzTitle]="'Occupancy Rate'"
+                      [nzValueStyle]="{ color: dashboardSummary.occupancyRate > 70 ? '#3f8600' : '#cf1322' }"></nz-statistic>
+        <div class="sub-stat">{{ dashboardSummary.averageRating || 0 }} avg rating</div>
+      </nz-card>
+    </div>
+  </div>
+
+  <nz-spin [nzSpinning]="loading">
+    <div nz-row [nzGutter]="16">
+      <!-- Revenue Report -->
+      <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Revenue Report">
+          <div class="report-item">
+            <span>Total Revenue</span>
+            <span class="value">{{ formatCurrency(revenueReport.totalRevenue) }}</span>
+          </div>
+          <div class="report-item">
+            <span>Net Revenue (after tax)</span>
+            <span class="value">{{ formatCurrency(revenueReport.netRevenue) }}</span>
+          </div>
+          <div class="report-item">
+            <span>Total Tax Collected</span>
+            <span class="value">{{ formatCurrency(revenueReport.totalTax) }}</span>
+          </div>
+          <div class="report-item">
+            <span>Transaction Count</span>
+            <span class="value">{{ revenueReport.transactionCount || 0 }}</span>
+          </div>
+          <div class="report-item">
+            <span>Average Transaction</span>
+            <span class="value">{{ formatCurrency(revenueReport.averageTransaction) }}</span>
+          </div>
+        </nz-card>
+      </div>
+
+      <!-- Occupancy Report -->
+      <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Occupancy Report">
+          <div class="report-item">
+            <span>Total Rooms</span>
+            <span class="value">{{ occupancyReport.totalRooms || 0 }}</span>
+          </div>
+          <div class="report-item">
+            <span>Total Room Nights</span>
+            <span class="value">{{ occupancyReport.totalRoomNights || 0 }}</span>
+          </div>
+          <div class="report-item">
+            <span>Occupied Nights</span>
+            <span class="value">{{ occupancyReport.occupiedNights || 0 }}</span>
+          </div>
+          <div class="report-item">
+            <span>Available Nights</span>
+            <span class="value">{{ occupancyReport.availableNights || 0 }}</span>
+          </div>
+          <div class="report-item">
+            <span>Occupancy Rate</span>
+            <span class="value" [class.text-success]="occupancyReport.occupancyRate > 70">{{ occupancyReport.occupancyRate || 0 }}%</span>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+
+    <div nz-row [nzGutter]="16" style="margin-top: 16px;">
+      <!-- Booking Report -->
+      <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Booking Report">
+          <div class="report-item">
+            <span>Total Bookings</span>
+            <span class="value">{{ bookingReport.totalBookings || 0 }}</span>
+          </div>
+          <div class="report-item">
+            <span>Confirmed Bookings</span>
+            <span class="value text-success">{{ bookingReport.confirmedBookings || 0 }}</span>
+          </div>
+          <div class="report-item">
+            <span>Pending Bookings</span>
+            <span class="value text-warning">{{ bookingReport.pendingBookings || 0 }}</span>
+          </div>
+          <div class="report-item">
+            <span>Cancelled Bookings</span>
+            <span class="value text-danger">{{ bookingReport.cancelledBookings || 0 }}</span>
+          </div>
+          <div class="report-item">
+            <span>Cancellation Rate</span>
+            <span class="value">{{ bookingReport.cancellationRate || 0 }}%</span>
+          </div>
+          <div class="report-item">
+            <span>Average Booking Value</span>
+            <span class="value">{{ formatCurrency(bookingReport.averageBookingValue) }}</span>
+          </div>
+        </nz-card>
+      </div>
+
+      <!-- Guest Report -->
+      <div nz-col [nzSpan]="12">
+        <nz-card nzTitle="Guest Report">
+          <div class="report-item">
+            <span>Total Guests</span>
+            <span class="value">{{ guestReport.totalGuests || 0 }}</span>
+          </div>
+          <div class="report-item">
+            <span>VIP Guests</span>
+            <span class="value">{{ guestReport.vipGuests || 0 }}</span>
+          </div>
+          <div class="report-item">
+            <span>New Guests (Period)</span>
+            <span class="value text-success">{{ guestReport.newGuests || 0 }}</span>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+
+    <!-- Room Performance -->
+    <nz-card nzTitle="Room Performance" style="margin-top: 16px;">
+      <nz-table #roomTable [nzData]="roomPerformance" [nzPageSize]="5">
+        <thead>
+          <tr>
+            <th>Room</th>
+            <th>Type</th>
+            <th>Bookings</th>
+            <th>Revenue</th>
+            <th>Avg Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let room of roomTable.data">
+            <td>{{ room.roomName }}</td>
+            <td>{{ room.roomType }}</td>
+            <td>{{ room.bookings }}</td>
+            <td>{{ formatCurrency(room.revenue) }}</td>
+            <td>
+              <nz-rate [ngModel]="room.avgRating" nzDisabled [nzCount]="5"></nz-rate>
+              ({{ room.avgRating }})
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </nz-spin>
+</div>

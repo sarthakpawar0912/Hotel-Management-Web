@@ -1,62 +1,395 @@
-<div class="center-form">
- 
-  <h1 class="page-title">My Bookings</h1>
-
-  <!-- Table Wrapper to Maintain Fixed Height -->
-  <div class="table-container">
-    <nz-table #basicTable [nzData]="bookings" [nzShowPagination]="false">
-      <thead>
-        <tr>
-          <th>Room Name</th>
-          <th>Room Type</th>
-          <th>Check In Date</th>
-          <th>Check Out Date</th>
-          <th>Price</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-
-      <tbody>
-       
-        <tr *ngFor="let booking of bookings">
-          <td>{{ booking.roomName }}</td>
-          <td>{{ booking.roomType }}</td>
-          <td>{{ booking.checkInDate | date: 'dd MMM yyyy' }}</td>
-          <td>{{ booking.checkoutDate | date: 'dd MMM yyyy' }}</td>
-          <td>₹{{ booking.price }}</td>
-          <td>
-            <ng-container *ngIf="booking.reservationStatus === 'PENDING'">
-              <nz-tag nzColor="processing">
-                <span nz-icon nzType="sync" nzSpin></span> Pending
-              </nz-tag>
-            </ng-container>
-
-            <ng-container *ngIf="booking.reservationStatus === 'APPROVED'">
-              <nz-tag nzColor="success">
-                <span nz-icon nzType="check-circle"></span> Approved
-              </nz-tag>
-            </ng-container>
-
-            <ng-container *ngIf="booking.reservationStatus === 'REJECTED'">
-              <nz-tag nzColor="error">
-                <span nz-icon nzType="close-circle"></span> Rejected
-              </nz-tag>
-            </ng-container>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
+<!-- Page Header -->
+<div class="page-header">
+  <div class="header-content">
+    <h1>My Bookings</h1>
+    <p>View and manage your hotel reservations</p>
   </div>
-
-
-  <!-- Pagination -->
-  <div class="pagination">
-    <nz-pagination 
-      [nzPageIndex]="currentPage" 
-      [nzTotal]="total" 
-      [nzPageSize]="5" 
-      (nzPageIndexChange)="pageIndexChange($event)">
-    </nz-pagination>
-    
+  <div class="header-stats" *ngIf="!loading && bookings.length > 0">
+    <div class="stat-item">
+      <span class="stat-value">{{ bookings.length }}</span>
+      <span class="stat-label">Total Bookings</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">{{ getActiveBookingsCount() }}</span>
+      <span class="stat-label">Active</span>
+    </div>
   </div>
 </div>
+
+<div class="bookings-container">
+  <nz-spin [nzSpinning]="loading" nzTip="Loading your bookings...">
+    <!-- Empty State -->
+    <div *ngIf="!loading && bookings.length === 0" class="empty-state">
+      <nz-empty [nzNotFoundImage]="emptyImage" [nzNotFoundContent]="emptyContent" [nzNotFoundFooter]="emptyFooter">
+        <ng-template #emptyImage>
+          <span nz-icon nzType="calendar" class="empty-icon"></span>
+        </ng-template>
+        <ng-template #emptyContent>
+          <div class="empty-text">
+            <h3>No bookings yet</h3>
+            <p>Start exploring our rooms and make your first reservation</p>
+          </div>
+        </ng-template>
+        <ng-template #emptyFooter>
+          <button nz-button nzType="primary" routerLink="/customer/rooms">
+            <span nz-icon nzType="search"></span> Browse Rooms
+          </button>
+        </ng-template>
+      </nz-empty>
+    </div>
+
+    <!-- Bookings Table (Desktop) -->
+    <div class="table-container desktop-view" *ngIf="bookings.length > 0">
+      <nz-table #bookingTable [nzData]="bookings" [nzShowPagination]="false" [nzBordered]="false">
+        <thead>
+          <tr>
+            <th nzWidth="100px">Booking ID</th>
+            <th>Room Details</th>
+            <th nzWidth="120px">Check In</th>
+            <th nzWidth="120px">Check Out</th>
+            <th nzWidth="80px" nzAlign="center">Nights</th>
+            <th nzWidth="140px">Amount</th>
+            <th nzWidth="180px">Status</th>
+            <th nzWidth="220px">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let booking of bookingTable.data" [class.cancelled-row]="booking.reservationStatus === 'CANCELLED'">
+            <td>
+              <span class="booking-id">#{{ booking.id }}</span>
+            </td>
+            <td>
+              <div class="room-info">
+                <span class="room-name">{{ booking.roomName }}</span>
+                <span class="room-type">
+                  <nz-tag nzColor="purple" [nzBordered]="false">{{ booking.roomType }}</nz-tag>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="date-info">
+                <span class="date">{{ booking.checkInDate | date:'dd MMM' }}</span>
+                <span class="year">{{ booking.checkInDate | date:'yyyy' }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="date-info">
+                <span class="date">{{ booking.checkOutDate | date:'dd MMM' }}</span>
+                <span class="year">{{ booking.checkOutDate | date:'yyyy' }}</span>
+              </div>
+            </td>
+            <td nzAlign="center">
+              <span class="nights-badge">{{ calculateNights(booking.checkInDate, booking.checkOutDate) }}</span>
+            </td>
+            <td>
+              <div class="amount-info">
+                <span class="total-amount">₹{{ calculateGST(booking.price).grandTotal | number }}</span>
+                <span class="base-price">Base: ₹{{ booking.price | number }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="status-badges">
+                <nz-tag [nzColor]="getStatusColor(booking.reservationStatus)" class="status-tag">
+                  <span nz-icon [nzType]="getStatusIcon(booking.reservationStatus)"
+                        [nzSpin]="booking.reservationStatus === 'PENDING'"></span>
+                  {{ booking.reservationStatus | titlecase }}
+                </nz-tag>
+                <nz-tag *ngIf="booking.isPaid" nzColor="success" class="payment-tag">
+                  <span nz-icon nzType="check-circle"></span> Paid
+                </nz-tag>
+                <nz-tag *ngIf="!booking.isPaid && booking.reservationStatus === 'APPROVED'" nzColor="warning" class="payment-tag">
+                  <span nz-icon nzType="clock-circle"></span> Unpaid
+                </nz-tag>
+              </div>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <!-- Pay Now Button -->
+                <button nz-button nzType="primary"
+                        *ngIf="booking.reservationStatus === 'APPROVED' && !booking.isPaid"
+                        [nzLoading]="paymentLoading && selectedBookingId === booking.id"
+                        (click)="initiatePayment(booking)"
+                        nz-tooltip nzTooltipTitle="Pay Now">
+                  <span nz-icon nzType="credit-card"></span>
+                  Pay ₹{{ calculateGST(booking.price).grandTotal | number }}
+                </button>
+
+                <!-- View Invoice Button -->
+                <button nz-button nzType="default"
+                        *ngIf="canViewInvoice(booking)"
+                        (click)="viewInvoice(booking)"
+                        nz-tooltip nzTooltipTitle="View Invoice">
+                  <span nz-icon nzType="file-text"></span>
+                </button>
+
+                <!-- Cancel Booking Button -->
+                <button nz-button nzType="default" nzDanger
+                        *ngIf="canCancelBooking(booking)"
+                        nz-popconfirm
+                        nzPopconfirmTitle="Are you sure you want to cancel this booking?"
+                        nzPopconfirmPlacement="left"
+                        (nzOnConfirm)="cancelBooking(booking)"
+                        [nzLoading]="cancelLoading && selectedBookingId === booking.id"
+                        nz-tooltip nzTooltipTitle="Cancel Booking">
+                  <span nz-icon nzType="close-circle"></span>
+                </button>
+
+                <!-- Status Info -->
+                <span *ngIf="booking.reservationStatus === 'PENDING'" class="status-info pending">
+                  <span nz-icon nzType="hourglass"></span> Awaiting approval
+                </span>
+                <span *ngIf="booking.reservationStatus === 'REJECTED'" class="status-info rejected">
+                  <span nz-icon nzType="close-circle"></span> Rejected
+                </span>
+                <span *ngIf="booking.reservationStatus === 'CANCELLED'" class="status-info cancelled">
+                  <span nz-icon nzType="stop"></span> Cancelled
+                </span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+
+    <!-- Bookings Cards (Mobile) -->
+    <div class="cards-container mobile-view" *ngIf="bookings.length > 0">
+      <nz-card *ngFor="let booking of bookings" class="booking-card" [class.cancelled]="booking.reservationStatus === 'CANCELLED'">
+        <div class="card-header">
+          <span class="booking-id">#{{ booking.id }}</span>
+          <nz-tag [nzColor]="getStatusColor(booking.reservationStatus)">
+            {{ booking.reservationStatus | titlecase }}
+          </nz-tag>
+        </div>
+
+        <div class="card-room">
+          <h3>{{ booking.roomName }}</h3>
+          <nz-tag nzColor="purple" [nzBordered]="false">{{ booking.roomType }}</nz-tag>
+        </div>
+
+        <div class="card-dates">
+          <div class="date-block">
+            <span class="label">Check-in</span>
+            <span class="value">{{ booking.checkInDate | date:'dd MMM yyyy' }}</span>
+          </div>
+          <span nz-icon nzType="arrow-right" class="arrow"></span>
+          <div class="date-block">
+            <span class="label">Check-out</span>
+            <span class="value">{{ booking.checkOutDate | date:'dd MMM yyyy' }}</span>
+          </div>
+        </div>
+
+        <div class="card-amount">
+          <div class="amount-row">
+            <span>Room Rate ({{ calculateNights(booking.checkInDate, booking.checkOutDate) }} nights)</span>
+            <span>₹{{ booking.price | number }}</span>
+          </div>
+          <div class="amount-row tax">
+            <span>GST (18%)</span>
+            <span>₹{{ calculateGST(booking.price).total | number }}</span>
+          </div>
+          <div class="amount-row total">
+            <span>Total</span>
+            <span>₹{{ calculateGST(booking.price).grandTotal | number }}</span>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <nz-tag *ngIf="booking.isPaid" nzColor="success">
+            <span nz-icon nzType="check-circle"></span> Paid
+          </nz-tag>
+          <nz-tag *ngIf="!booking.isPaid && booking.reservationStatus === 'APPROVED'" nzColor="warning">
+            <span nz-icon nzType="clock-circle"></span> Payment Pending
+          </nz-tag>
+        </div>
+
+        <div class="card-actions">
+          <button nz-button nzType="primary" nzBlock
+                  *ngIf="booking.reservationStatus === 'APPROVED' && !booking.isPaid"
+                  [nzLoading]="paymentLoading && selectedBookingId === booking.id"
+                  (click)="initiatePayment(booking)">
+            <span nz-icon nzType="credit-card"></span> Pay Now
+          </button>
+
+          <div class="action-row" *ngIf="canViewInvoice(booking) || canCancelBooking(booking)">
+            <button nz-button *ngIf="canViewInvoice(booking)" (click)="viewInvoice(booking)">
+              <span nz-icon nzType="file-text"></span> Invoice
+            </button>
+            <button nz-button nzDanger *ngIf="canCancelBooking(booking)"
+                    nz-popconfirm
+                    nzPopconfirmTitle="Cancel this booking?"
+                    (nzOnConfirm)="cancelBooking(booking)"
+                    [nzLoading]="cancelLoading && selectedBookingId === booking.id">
+              <span nz-icon nzType="close-circle"></span> Cancel
+            </button>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container" *ngIf="total > 5">
+      <nz-pagination
+        [nzPageIndex]="currentPage"
+        [nzTotal]="total"
+        [nzPageSize]="5"
+        (nzPageIndexChange)="pageIndexChange($event)">
+      </nz-pagination>
+    </div>
+  </nz-spin>
+</div>
+
+<!-- Invoice Modal -->
+<nz-modal [(nzVisible)]="invoiceModalVisible"
+          nzTitle="Invoice Details"
+          [nzWidth]="720"
+          [nzFooter]="invoiceFooter"
+          (nzOnCancel)="closeInvoiceModal()"
+          nzClassName="invoice-modal">
+
+  <ng-container *nzModalContent>
+    <nz-spin [nzSpinning]="invoiceLoading">
+      <div class="invoice-view" id="invoice-print-section" *ngIf="selectedInvoice">
+
+        <!-- Invoice Header -->
+        <div class="invoice-header">
+          <div class="hotel-info">
+            <h2>HOTEL MANAGEMENT SYSTEM</h2>
+            <p>Tax Invoice / Receipt</p>
+          </div>
+          <div class="invoice-number">
+            <h3>{{ selectedInvoice.invoiceNumber }}</h3>
+            <nz-tag [nzColor]="selectedInvoice.isPaid ? 'success' : 'error'" style="font-size: 14px;">
+              {{ selectedInvoice.isPaid ? 'PAID' : 'UNPAID' }}
+            </nz-tag>
+          </div>
+        </div>
+
+        <nz-divider></nz-divider>
+
+        <!-- Guest & Booking Info -->
+        <div class="invoice-info-grid">
+          <div class="info-section">
+            <h4><span nz-icon nzType="user"></span> Bill To</h4>
+            <p><strong>{{ selectedInvoice.guestName }}</strong></p>
+            <p *ngIf="selectedInvoice.guestEmail">{{ selectedInvoice.guestEmail }}</p>
+            <p *ngIf="selectedInvoice.guestPhone">{{ selectedInvoice.guestPhone }}</p>
+            <p *ngIf="selectedInvoice.gstin">GSTIN: {{ selectedInvoice.gstin }}</p>
+          </div>
+          <div class="info-section">
+            <h4><span nz-icon nzType="file-text"></span> Booking Details</h4>
+            <p>Reservation #{{ selectedInvoice.reservationId }}</p>
+            <p>Date: {{ selectedInvoice.issuedAt | date:'dd MMM yyyy' }}</p>
+          </div>
+        </div>
+
+        <nz-divider></nz-divider>
+
+        <!-- Room Details Table -->
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Stay Details</th>
+              <th class="text-right">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>{{ selectedInvoice.roomName }}</strong>
+                <br><small class="text-muted">{{ selectedInvoice.roomType }}</small>
+              </td>
+              <td>
+                <div>Check-in: {{ selectedInvoice.checkInDate | date:'dd MMM yyyy' }}</div>
+                <div>Check-out: {{ selectedInvoice.checkOutDate | date:'dd MMM yyyy' }}</div>
+                <nz-tag nzColor="blue" style="margin-top: 4px;">{{ selectedInvoice.nights }} Night(s)</nz-tag>
+              </td>
+              <td class="text-right">₹{{ selectedInvoice.roomCharges | number }}</td>
+            </tr>
+            <tr *ngIf="selectedInvoice.serviceCharges > 0">
+              <td>Service Charges</td>
+              <td>Additional Services</td>
+              <td class="text-right">₹{{ selectedInvoice.serviceCharges | number }}</td>
+            </tr>
+            <tr *ngIf="selectedInvoice.additionalCharges > 0">
+              <td>Additional Charges</td>
+              <td>{{ selectedInvoice.additionalChargesDescription || 'Extra charges' }}</td>
+              <td class="text-right">₹{{ selectedInvoice.additionalCharges | number }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <nz-divider></nz-divider>
+
+        <!-- GST Breakdown -->
+        <div class="invoice-summary">
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>₹{{ selectedInvoice.subtotal || selectedInvoice.roomCharges | number }}</span>
+          </div>
+
+          <div class="summary-row discount" *ngIf="selectedInvoice.discount > 0">
+            <span>Discount</span>
+            <span class="text-success">- ₹{{ selectedInvoice.discount | number }}</span>
+          </div>
+
+          <nz-divider dashed></nz-divider>
+
+          <div class="summary-row tax">
+            <span>
+              CGST (9%)
+              <nz-tag nzColor="processing" style="margin-left: 8px;">GST</nz-tag>
+            </span>
+            <span>₹{{ selectedInvoice.cgst | number }}</span>
+          </div>
+
+          <div class="summary-row tax">
+            <span>
+              SGST (9%)
+              <nz-tag nzColor="processing" style="margin-left: 8px;">GST</nz-tag>
+            </span>
+            <span>₹{{ selectedInvoice.sgst | number }}</span>
+          </div>
+
+          <div class="summary-row total-tax">
+            <span>Total Tax (18%)</span>
+            <span>₹{{ selectedInvoice.totalTax || (selectedInvoice.cgst + selectedInvoice.sgst) | number }}</span>
+          </div>
+
+          <nz-divider></nz-divider>
+
+          <div class="summary-row grand-total">
+            <span>GRAND TOTAL</span>
+            <span>₹{{ selectedInvoice.grandTotal | number }}</span>
+          </div>
+
+          <div class="summary-row paid" *ngIf="selectedInvoice.amountPaid > 0">
+            <span>Amount Paid</span>
+            <span class="text-success">₹{{ selectedInvoice.amountPaid | number }}</span>
+          </div>
+
+          <div class="summary-row balance" *ngIf="selectedInvoice.balanceDue > 0">
+            <span>Balance Due</span>
+            <span class="text-danger">₹{{ selectedInvoice.balanceDue | number }}</span>
+          </div>
+        </div>
+
+        <!-- Footer Note -->
+        <div class="invoice-footer">
+          <p>Thank you for staying with us!</p>
+          <p class="small">This is a computer-generated invoice and does not require a signature.</p>
+        </div>
+      </div>
+    </nz-spin>
+  </ng-container>
+
+  <ng-template #invoiceFooter>
+    <button nz-button nzType="default" (click)="closeInvoiceModal()">Close</button>
+    <button nz-button nzType="primary" (click)="printInvoice()">
+      <span nz-icon nzType="printer"></span> Print
+    </button>
+    <button nz-button nzType="primary" nzGhost (click)="downloadInvoice()">
+      <span nz-icon nzType="download"></span> Download PDF
+    </button>
+  </ng-template>
+</nz-modal>

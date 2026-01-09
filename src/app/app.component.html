@@ -1,79 +1,106 @@
-<nz-layout>
-  
-  <!-- Default Sidebar (Not Logged In) -->
-  <nz-sider nzCollapsible nzWidth="200px" *ngIf="!isAdminLoggedIn && !isCustomerLoggedIn">
-    <div class="logo"></div>
-    <ul nz-menu nzTheme="dark" nzMode="inline">
-      <li nz-menu-item routerLink="/register">
-        <span nz-icon nzType="user"></span>
-        <span><strong>Register</strong></span>
-      </li>
-      <li nz-menu-item routerLink="/">
-        <span nz-icon nzType="login"></span>
-        <span><strong>Login</strong></span>
-      </li>
-    </ul>
-  </nz-sider>
+<!-- CUSTOMER PANEL - Uses its own layout component -->
+<ng-container *ngIf="isCustomerLoggedIn">
+  <router-outlet></router-outlet>
+</ng-container>
 
-  <!-- Admin Sidebar -->
-  <nz-sider nzCollapsible nzWidth="200px" *ngIf="isAdminLoggedIn">
-    <div class="logo"></div>
-    <ul nz-menu nzTheme="dark" nzMode="inline">
-     
-      <li nz-menu-item routerLink="/admin/room">
-        <span nz-icon nzType="apartment"></span>
-        <span><strong>Post Room</strong></span>
-      </li>
-     
-      <li nz-menu-item routerLink="/admin/dashboard">
-        <span nz-icon nzType="apartment"></span>
-        <span><strong>Rooms</strong></span>
-      </li>
-     
-      <li nz-menu-item routerLink="/admin/reservations">
-        <span nz-icon nzType="pull-request"></span>
-        <span><strong>Reservations</strong></span>
-      </li>
-     
-      <li nz-menu-item (click)="logout()">
-        <span nz-icon nzType="logout"></span>
-        <span><strong>Logout</strong></span>
-      </li>
+<!-- DEFAULT & ADMIN PANEL - Uses app.component layout -->
+<ng-container *ngIf="!isCustomerLoggedIn">
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-    </ul>
-  </nz-sider>
+      <!-- Default Sidebar (Not Logged In) -->
+      <ng-container *ngIf="!isAdminLoggedIn">
+        <div class="sidebar-logo">
+          <span class="logo-text">Hotel Management</span>
+        </div>
+        <nav class="sidebar-nav">
+          <ul nz-menu nzTheme="dark" nzMode="inline">
+            <li nz-menu-item routerLink="/register" routerLinkActive="ant-menu-item-selected">
+              <span nz-icon nzType="user-add"></span>
+              <span>Register</span>
+            </li>
+            <li nz-menu-item routerLink="/" routerLinkActive="ant-menu-item-selected" [routerLinkActiveOptions]="{exact: true}">
+              <span nz-icon nzType="login"></span>
+              <span>Login</span>
+            </li>
+          </ul>
+        </nav>
+      </ng-container>
 
-  <!-- Customer Sidebar -->
-  <nz-sider nzCollapsible nzWidth="200px" *ngIf="isCustomerLoggedIn">
-    <div class="logo"></div>
-    <ul nz-menu nzTheme="dark" nzMode="inline">
-    
-      <li nz-menu-item routerLink="/customer/rooms">
-        <span nz-icon nzType="apartment"></span>
-        <span><strong>Rooms</strong></span>
-      </li>
-    
-      <li nz-menu-item routerLink="/customer/bookings">
-        <span nz-icon nzType="pull-request"></span>
-        <span><strong>Bookings</strong></span>
-      </li>
-    
-      <li nz-menu-item (click)="logout()">
-        <span nz-icon nzType="logout"></span>
-        <span><strong>Logout</strong></span>
-      </li>
+      <!-- Admin Sidebar -->
+      <ng-container *ngIf="isAdminLoggedIn">
+        <div class="sidebar-logo">
+          <span class="logo-text">Admin Panel</span>
+        </div>
+        <nav class="sidebar-nav">
+          <ul nz-menu nzTheme="dark" nzMode="inline">
+            <li nz-submenu nzTitle="Room Management" nzIcon="home">
+              <ul>
+                <li nz-menu-item routerLink="/admin/dashboard" routerLinkActive="ant-menu-item-selected">
+                  <span>All Rooms</span>
+                </li>
+                <li nz-menu-item routerLink="/admin/room" routerLinkActive="ant-menu-item-selected">
+                  <span>Add Room</span>
+                </li>
+              </ul>
+            </li>
+            <li nz-submenu nzTitle="Reservations" nzIcon="calendar">
+              <ul>
+                <li nz-menu-item routerLink="/admin/reservations" routerLinkActive="ant-menu-item-selected">
+                  <span>All Reservations</span>
+                </li>
+                <li nz-menu-item routerLink="/admin/check-in-out" routerLinkActive="ant-menu-item-selected">
+                  <span>Check-In/Out</span>
+                </li>
+              </ul>
+            </li>
+            <li nz-menu-item routerLink="/admin/guests" routerLinkActive="ant-menu-item-selected">
+              <span nz-icon nzType="team"></span>
+              <span>Guests</span>
+            </li>
+            <li nz-submenu nzTitle="Billing" nzIcon="dollar">
+              <ul>
+                <li nz-menu-item routerLink="/admin/invoices" routerLinkActive="ant-menu-item-selected">
+                  <span>Invoices</span>
+                </li>
+                <li nz-menu-item routerLink="/admin/payments" routerLinkActive="ant-menu-item-selected">
+                  <span>Payments</span>
+                </li>
+              </ul>
+            </li>
+            <li nz-menu-item routerLink="/admin/promotions" routerLinkActive="ant-menu-item-selected">
+              <span nz-icon nzType="gift"></span>
+              <span>Promotions</span>
+            </li>
+            <li nz-menu-item routerLink="/admin/reviews" routerLinkActive="ant-menu-item-selected">
+              <span nz-icon nzType="star"></span>
+              <span>Reviews</span>
+            </li>
+            <li nz-menu-item routerLink="/admin/reports" routerLinkActive="ant-menu-item-selected">
+              <span nz-icon nzType="bar-chart"></span>
+              <span>Reports</span>
+            </li>
+            <li nz-menu-item (click)="logout()" class="logout-item">
+              <span nz-icon nzType="logout"></span>
+              <span>Logout</span>
+            </li>
+          </ul>
+        </nav>
+      </ng-container>
 
-    </ul>
-  </nz-sider>
+    </aside>
 
-  <nz-layout>
-    <nz-content>
-      <router-outlet></router-outlet>
-    </nz-content>
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
 
-    <nz-footer>
-      <p>© 2025 Hotel Management System</p>
-    </nz-footer>
-  </nz-layout>
-  
-</nz-layout>
+      <!-- FOOTER -->
+      <footer class="app-footer">
+        <p>Hotel Management System &copy; {{ currentYear }}</p>
+      </footer>
+    </main>
+  </div>
+</ng-container>

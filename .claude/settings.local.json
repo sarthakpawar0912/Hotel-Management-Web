@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"C:\\\\Users\\\\Sarthak\\\\OneDrive\\\\Desktop\\\\main SPRING BOOT Projeccts\\\\HOTEL MANAGEMENT NEW\\\\hotel-management-system\\\\src\" /s)",
+      "Bash(mvn compile:*)",
+      "Bash(npm run build:*)",
+      "Bash(dir \"C:\\\\Users\\\\Sarthak\\\\OneDrive\\\\Desktop\\\\main SPRING BOOT Projeccts\\\\HOTEL MANAGEMENT NEW\\\\hotel-management-system\\\\src\\\\app\")",
+      "Bash(dir:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

@@ -1,0 +1,319 @@
+.guests-container {
+  padding: 0;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #6a1b9a, #ab47bc);
+    color: #fff;
+    gap: 16px;
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 8px;
+
+      nz-tag {
+        font-size: 14px;
+        padding: 4px 12px;
+        border-radius: 12px;
+      }
+    }
+
+    button {
+      height: 40px;
+      font-weight: 500;
+    }
+  }
+
+  .filters {
+    display: flex;
+    align-items: center;
+    padding: 20px 24px;
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    nz-input-group {
+      width: 280px;
+
+      @media (max-width: 768px) {
+        width: 100%;
+      }
+    }
+
+    nz-select {
+      min-width: 140px;
+    }
+  }
+
+  .table-wrapper {
+    padding: 24px;
+    background: #fff;
+    min-height: 400px;
+  }
+
+  nz-table {
+    ::ng-deep .ant-table {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    ::ng-deep .ant-table-thead > tr > th {
+      background: #fafafa;
+      font-weight: 600;
+      color: #1a1a2e;
+      border-bottom: 2px solid #f0f0f0;
+      padding: 14px 16px;
+    }
+
+    ::ng-deep .ant-table-tbody > tr > td {
+      padding: 14px 16px;
+      vertical-align: middle;
+    }
+
+    ::ng-deep .ant-table-tbody > tr:hover > td {
+      background: #f5f0ff !important;
+    }
+  }
+
+  .guest-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .guest-name {
+      font-weight: 500;
+      color: #1a1a2e;
+    }
+
+    .vip-badge {
+      font-size: 11px;
+      padding: 0 6px;
+    }
+  }
+
+  .guest-id {
+    font-size: 12px;
+    color: #8c8c8c;
+    margin-top: 4px;
+  }
+
+  .contact-info {
+    div {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #595959;
+      font-size: 13px;
+
+      span[nz-icon] {
+        color: #8c8c8c;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .loyalty-points {
+    font-size: 12px;
+    color: #8c8c8c;
+    margin-top: 4px;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .stays-count {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1a1a2e;
+  }
+
+  .total-spent {
+    color: #52c41a;
+  }
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    button[nzType="link"] {
+      padding: 4px 6px;
+      height: auto;
+
+      span[nz-icon] {
+        font-size: 15px;
+      }
+
+      &:hover {
+        background: #f5f0ff;
+        border-radius: 4px;
+      }
+
+      &.vip-btn {
+        color: #faad14;
+
+        &:hover {
+          background: #fffbe6;
+        }
+      }
+
+      &.remove-vip-btn {
+        color: #faad14;
+
+        &:hover {
+          background: #fffbe6;
+        }
+      }
+
+      &.unblock-btn {
+        color: #52c41a;
+
+        &:hover {
+          background: #f6ffed;
+        }
+      }
+    }
+  }
+
+  nz-tag {
+    font-weight: 500;
+    border-radius: 4px;
+
+    span[nz-icon] {
+      margin-right: 4px;
+    }
+  }
+}
+
+// Modal styling
+::ng-deep .ant-modal-content {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+::ng-deep .ant-modal-header {
+  background: linear-gradient(135deg, #6a1b9a, #ab47bc);
+  border-bottom: none;
+  padding: 16px 24px;
+
+  .ant-modal-title {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+::ng-deep .ant-modal-close {
+  color: #fff;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+::ng-deep .ant-modal-body {
+  padding: 24px;
+}
+
+::ng-deep .ant-modal-footer {
+  border-top: 1px solid #f0f0f0;
+  padding: 12px 24px;
+
+  button[nz-button] {
+    border-radius: 6px;
+  }
+}
+
+// View Guest Details Modal
+.guest-details {
+  .detail-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+
+    .guest-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6a1b9a, #ab47bc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      span[nz-icon] {
+        font-size: 28px;
+        color: #fff;
+      }
+    }
+
+    .guest-main-info {
+      h3 {
+        margin: 0 0 8px 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: #1a1a2e;
+      }
+
+      .badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .guests-container {
+    .header {
+      flex-direction: column;
+      gap: 12px;
+      text-align: center;
+    }
+
+    .filters {
+      flex-direction: column;
+      align-items: stretch;
+
+      nz-input-group, nz-select {
+        width: 100% !important;
+        margin-left: 0 !important;
+      }
+    }
+
+    .table-wrapper {
+      padding: 16px;
+    }
+
+    nz-table {
+      ::ng-deep .ant-table {
+        overflow-x: auto;
+      }
+    }
+
+    .action-buttons {
+      flex-wrap: wrap;
+    }
+  }
+
+  .guest-details {
+    .detail-header {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+}

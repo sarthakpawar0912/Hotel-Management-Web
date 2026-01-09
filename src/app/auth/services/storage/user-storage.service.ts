@@ -9,11 +9,52 @@ const USER = 'user';
 })
 
 export class UserStorageService {
- 
+
   private userSubject = new BehaviorSubject<any>(this.getUser());
   user$ = this.userSubject.asObservable();
 
   constructor() {}
+
+  // Decode JWT token to get payload
+  private decodeToken(token: string): any {
+    try {
+      const payload = token.split('.')[1];
+      return JSON.parse(atob(payload));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Check if token is expired (only if token has exp claim)
+  isTokenExpired(): boolean {
+    const token = this.getToken();
+    if (!token) {
+      return true;
+    }
+
+    const decoded = this.decodeToken(token);
+    // If no exp claim or decode fails, assume token is valid (let backend decide)
+    if (!decoded || !decoded.exp) {
+      return false;
+    }
+
+    // exp is in seconds, Date.now() is in milliseconds
+    const expirationDate = decoded.exp * 1000;
+    return Date.now() >= expirationDate;
+  }
+
+  // Check token validity and clear if expired
+  checkTokenValidity(): boolean {
+    const token = this.getToken();
+    if (!token) {
+      return false;
+    }
+    if (this.isTokenExpired()) {
+      this.signOut();
+      return false;
+    }
+    return true;
+  }
 
   saveToken(token: string): void {
     window.localStorage.removeItem(TOKEN);
@@ -42,15 +83,21 @@ export class UserStorageService {
 
   getUserRole(): string {
     const user = this.getUser();
-    return user ? user.role : '';
+    if (!user) return '';
+    // Handle different possible field names for role
+    return user.role || user.userRole || user.roles?.[0] || '';
   }
-  
- isAdminLoggedIn(): boolean {
-    return this.getToken() !== null && this.getUserRole() === 'ADMIN';
+
+  isAdminLoggedIn(): boolean {
+    if (this.getToken() === null || this.isTokenExpired()) return false;
+    const role = this.getUserRole()?.toUpperCase();
+    return role === 'ADMIN' || role === 'ROLE_ADMIN';
   }
 
   isCustomerLoggedIn(): boolean {
-    return this.getToken() !== null && this.getUserRole() === 'CUSTOMER';
+    if (this.getToken() === null || this.isTokenExpired()) return false;
+    const role = this.getUserRole()?.toUpperCase();
+    return role === 'CUSTOMER' || role === 'ROLE_CUSTOMER' || role === 'USER' || role === 'ROLE_USER';
   }
 
   signOut(): void {

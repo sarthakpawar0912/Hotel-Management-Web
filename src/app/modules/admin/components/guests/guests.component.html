@@ -1,0 +1,312 @@
+<div class="guests-container">
+  <div class="header">
+    <h2>Guest Management</h2>
+    <div class="header-stats">
+      <nz-tag nzColor="blue">Total: {{ guests.length }}</nz-tag>
+      <nz-tag nzColor="gold">VIP: {{ getVipCount() }}</nz-tag>
+    </div>
+    <button nz-button nzType="primary" (click)="showAddModal()">
+      <span nz-icon nzType="plus"></span> Add Guest
+    </button>
+  </div>
+
+  <div class="filters">
+    <nz-input-group [nzSuffix]="suffixIconSearch">
+      <input type="text" nz-input placeholder="Search by name, email or phone..." [(ngModel)]="searchText" (ngModelChange)="applyFilters()" />
+    </nz-input-group>
+    <ng-template #suffixIconSearch>
+      <span nz-icon nzType="search"></span>
+    </ng-template>
+
+    <nz-select [(ngModel)]="filterType" nzPlaceHolder="Filter Guests" (ngModelChange)="applyFilters()">
+      <nz-option nzValue="all" nzLabel="All Guests"></nz-option>
+      <nz-option nzValue="vip" nzLabel="VIP Only"></nz-option>
+      <nz-option nzValue="blacklisted" nzLabel="Blacklisted"></nz-option>
+    </nz-select>
+
+    <nz-select [(ngModel)]="filterLoyalty" nzPlaceHolder="Loyalty Tier" nzAllowClear (ngModelChange)="applyFilters()">
+      <nz-option *ngFor="let tier of loyaltyTiers" [nzValue]="tier" [nzLabel]="tier"></nz-option>
+    </nz-select>
+
+    <button nz-button (click)="clearFilters()" *ngIf="searchText || filterType !== 'all' || filterLoyalty">
+      <span nz-icon nzType="close"></span> Clear
+    </button>
+  </div>
+
+  <div class="table-wrapper">
+    <nz-spin [nzSpinning]="loading">
+      <nz-table #guestTable [nzData]="filteredGuests" [nzPageSize]="10" [nzShowPagination]="true"
+                [nzBordered]="false" [nzSize]="'middle'" [nzNoResult]="noDataTpl">
+        <thead>
+          <tr>
+            <th nzWidth="200px">Guest</th>
+            <th>Contact</th>
+            <th nzWidth="120px">Loyalty</th>
+            <th nzWidth="100px">Status</th>
+            <th nzWidth="100px">Stays</th>
+            <th nzWidth="120px">Total Spent</th>
+            <th nzWidth="180px">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let guest of guestTable.data">
+            <td>
+              <div class="guest-name-cell">
+                <span class="guest-name">{{ guest.firstName }} {{ guest.lastName }}</span>
+                <nz-tag *ngIf="guest.isVip" nzColor="gold" class="vip-badge">
+                  <span nz-icon nzType="star" nzTheme="fill"></span> VIP
+                </nz-tag>
+              </div>
+              <div class="guest-id" *ngIf="guest.idProofType">
+                {{ guest.idProofType }}: {{ guest.idProofNumber }}
+              </div>
+            </td>
+            <td>
+              <div class="contact-info">
+                <div *ngIf="guest.email"><span nz-icon nzType="mail"></span> {{ guest.email }}</div>
+                <div *ngIf="guest.phone"><span nz-icon nzType="phone"></span> {{ guest.phone }}</div>
+              </div>
+            </td>
+            <td>
+              <nz-tag [nzColor]="getLoyaltyColor(guest.loyaltyTier)">
+                <span nz-icon nzType="trophy"></span> {{ guest.loyaltyTier || 'BRONZE' }}
+              </nz-tag>
+              <div class="loyalty-points">{{ guest.loyaltyPoints || 0 }} pts</div>
+            </td>
+            <td>
+              <nz-tag *ngIf="guest.isBlacklisted" nzColor="red">
+                <span nz-icon nzType="stop"></span> Blocked
+              </nz-tag>
+              <nz-tag *ngIf="!guest.isBlacklisted" nzColor="green">
+                <span nz-icon nzType="check-circle"></span> Active
+              </nz-tag>
+            </td>
+            <td class="text-center">
+              <span class="stays-count">{{ guest.totalStays || 0 }}</span>
+            </td>
+            <td>
+              <strong class="total-spent">{{ guest.totalSpent | currency:'INR':'symbol':'1.0-0' }}</strong>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button nz-button nzType="link" nzSize="small" (click)="showViewModal(guest)"
+                        nz-tooltip nzTooltipTitle="View Details">
+                  <span nz-icon nzType="eye"></span>
+                </button>
+                <button nz-button nzType="link" nzSize="small" (click)="showEditModal(guest)"
+                        nz-tooltip nzTooltipTitle="Edit Guest">
+                  <span nz-icon nzType="edit"></span>
+                </button>
+                <button nz-button nzType="link" nzSize="small" *ngIf="!guest.isVip" (click)="markAsVip(guest.id)"
+                        nz-tooltip nzTooltipTitle="Mark as VIP" class="vip-btn">
+                  <span nz-icon nzType="star"></span>
+                </button>
+                <button nz-button nzType="link" nzSize="small" *ngIf="guest.isVip" (click)="removeVipStatus(guest.id)"
+                        nz-tooltip nzTooltipTitle="Remove VIP Status" class="remove-vip-btn">
+                  <span nz-icon nzType="star" nzTheme="fill"></span>
+                </button>
+                <button nz-button nzType="link" nzSize="small" nzDanger *ngIf="!guest.isBlacklisted" (click)="blacklistGuest(guest)"
+                        nz-tooltip nzTooltipTitle="Blacklist Guest">
+                  <span nz-icon nzType="stop"></span>
+                </button>
+                <button nz-button nzType="link" nzSize="small" *ngIf="guest.isBlacklisted" (click)="removeFromBlacklist(guest.id)"
+                        nz-tooltip nzTooltipTitle="Remove from Blacklist" class="unblock-btn">
+                  <span nz-icon nzType="check"></span>
+                </button>
+                <button nz-button nzType="link" nzSize="small" nzDanger (click)="deleteGuest(guest.id)"
+                        nz-tooltip nzTooltipTitle="Delete Guest">
+                  <span nz-icon nzType="delete"></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <ng-template #noDataTpl>
+        <nz-empty [nzNotFoundContent]="'No guests found'"></nz-empty>
+      </ng-template>
+    </nz-spin>
+  </div>
+</div>
+
+<nz-modal [(nzVisible)]="isModalVisible" [nzTitle]="isEditMode ? 'Edit Guest' : 'Add Guest'"
+          (nzOnCancel)="handleCancel()" (nzOnOk)="handleSubmit()" [nzWidth]="700">
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="guestForm" nzLayout="vertical">
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>First Name</nz-form-label>
+            <nz-form-control nzErrorTip="First name is required">
+              <input nz-input formControlName="firstName" placeholder="First Name" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label>Last Name</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="lastName" placeholder="Last Name" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label>Email</nz-form-label>
+            <nz-form-control nzErrorTip="Please enter a valid email">
+              <input nz-input formControlName="email" placeholder="Email" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>Phone</nz-form-label>
+            <nz-form-control nzErrorTip="Phone is required">
+              <input nz-input formControlName="phone" placeholder="Phone" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label>Date of Birth</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="dateOfBirth" style="width: 100%;"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label>Gender</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="gender" nzPlaceHolder="Select Gender">
+                <nz-option nzValue="Male" nzLabel="Male"></nz-option>
+                <nz-option nzValue="Female" nzLabel="Female"></nz-option>
+                <nz-option nzValue="Other" nzLabel="Other"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label>ID Proof Type</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="idProofType" nzPlaceHolder="Select ID Type">
+                <nz-option *ngFor="let type of idProofTypes" [nzValue]="type" [nzLabel]="type"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label>ID Proof Number</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="idProofNumber" placeholder="ID Number" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label>Address</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="address" placeholder="Address" [nzAutosize]="{ minRows: 2, maxRows: 4 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label>City</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="city" placeholder="City" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label>State</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="state" placeholder="State" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label>Country</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="country" placeholder="Country" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label>Special Requests</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="specialRequests" placeholder="Special requests or preferences" [nzAutosize]="{ minRows: 2, maxRows: 4 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<!-- View Guest Details Modal -->
+<nz-modal [(nzVisible)]="isViewModalVisible" nzTitle="Guest Details" (nzOnCancel)="closeViewModal()"
+          [nzFooter]="viewModalFooter" [nzWidth]="600">
+  <ng-container *nzModalContent>
+    <div class="guest-details" *ngIf="viewGuest">
+      <div class="detail-header">
+        <div class="guest-avatar">
+          <span nz-icon nzType="user" nzTheme="outline"></span>
+        </div>
+        <div class="guest-main-info">
+          <h3>{{ viewGuest.firstName }} {{ viewGuest.lastName }}</h3>
+          <div class="badges">
+            <nz-tag *ngIf="viewGuest.isVip" nzColor="gold"><span nz-icon nzType="star" nzTheme="fill"></span> VIP</nz-tag>
+            <nz-tag [nzColor]="getLoyaltyColor(viewGuest.loyaltyTier)">{{ viewGuest.loyaltyTier || 'BRONZE' }}</nz-tag>
+            <nz-tag *ngIf="viewGuest.isBlacklisted" nzColor="red">Blacklisted</nz-tag>
+          </div>
+        </div>
+      </div>
+
+      <nz-divider></nz-divider>
+
+      <nz-descriptions nzBordered [nzColumn]="2">
+        <nz-descriptions-item nzTitle="Email" [nzSpan]="1">{{ viewGuest.email || '-' }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Phone" [nzSpan]="1">{{ viewGuest.phone || '-' }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Date of Birth" [nzSpan]="1">{{ viewGuest.dateOfBirth || '-' }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Gender" [nzSpan]="1">{{ viewGuest.gender || '-' }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="ID Proof" [nzSpan]="2">
+          {{ viewGuest.idProofType ? viewGuest.idProofType + ': ' + viewGuest.idProofNumber : '-' }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Address" [nzSpan]="2">
+          {{ viewGuest.address || '-' }}
+          <span *ngIf="viewGuest.city">, {{ viewGuest.city }}</span>
+          <span *ngIf="viewGuest.state">, {{ viewGuest.state }}</span>
+          <span *ngIf="viewGuest.country">, {{ viewGuest.country }}</span>
+          <span *ngIf="viewGuest.zipCode"> - {{ viewGuest.zipCode }}</span>
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Total Stays" [nzSpan]="1">{{ viewGuest.totalStays || 0 }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Total Spent" [nzSpan]="1">{{ viewGuest.totalSpent | currency:'INR':'symbol':'1.0-0' }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Loyalty Points" [nzSpan]="1">{{ viewGuest.loyaltyPoints || 0 }} pts</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Company" [nzSpan]="1">{{ viewGuest.companyName || '-' }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Special Requests" [nzSpan]="2">{{ viewGuest.specialRequests || 'None' }}</nz-descriptions-item>
+      </nz-descriptions>
+    </div>
+  </ng-container>
+  <ng-template #viewModalFooter>
+    <button nz-button (click)="closeViewModal()">Close</button>
+    <button nz-button nzType="primary" (click)="editFromView()">
+      <span nz-icon nzType="edit"></span> Edit
+    </button>
+  </ng-template>
+</nz-modal>

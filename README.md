@@ -1,109 +1,380 @@
-<<<<<<< HEAD
-# HotelManagementSystem
+# Hotel Management System - Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.6.
+A modern **Angular 18** frontend application for the Hotel Management System featuring Ng-Zorro UI, Razorpay payment integration, and responsive design.
 
-## Development server
+---
 
-To start a local development server, run:
+## Table of Contents
+
+1. [Overview](#1-overview)
+2. [Features](#2-features)
+3. [Tech Stack](#3-tech-stack)
+4. [Project Structure](#4-project-structure)
+5. [Screenshots](#5-screenshots)
+6. [Installation](#6-installation)
+7. [Configuration](#7-configuration)
+8. [Running the Application](#8-running-the-application)
+9. [Customer Module](#9-customer-module)
+10. [Admin Module](#10-admin-module)
+11. [Razorpay Integration](#11-razorpay-integration)
+12. [Styling & Theme](#12-styling--theme)
+
+---
+
+## 1. Overview
+
+This is the frontend application for the Hotel Management System, providing:
+- **Customer Portal**: Browse rooms, book stays, pay online, manage bookings
+- **Admin Panel**: Manage rooms, reservations, guests, payments, and more
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+
+**Backend Repository:** [Hotel-Management-Application](https://github.com/sarthakpawar0912/Hotel-Management-Application.git)
+
+---
+
+## 2. Features
+
+### Customer Features
+- Browse available rooms with filters
+- Book rooms with date selection
+- Apply promo codes for discounts
+- Pay online via Razorpay
+- View booking history
+- View and download invoices
+- Submit and manage reviews
+- Receive notifications
+
+### Admin Features
+- Dashboard with statistics
+- Room management (CRUD)
+- Reservation management
+- Guest check-in/check-out
+- Payment tracking
+- Invoice generation
+- Promotion management
+- Review moderation
+- Reports and analytics
+
+---
+
+## 3. Tech Stack
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Angular | 18.x | Frontend framework |
+| Ng-Zorro Ant Design | 18.x | UI component library |
+| TypeScript | 5.x | Programming language |
+| RxJS | 7.x | Reactive programming |
+| Razorpay Checkout | Latest | Payment gateway |
+| SCSS | - | Styling |
+
+---
+
+## 4. Project Structure
+
+```
+src/
+├── app/
+│   ├── auth/                    # Authentication module
+│   │   ├── components/          # Login, Register
+│   │   └── services/            # Auth, Storage services
+│   │
+│   ├── modules/
+│   │   ├── admin/               # Admin module
+│   │   │   ├── components/
+│   │   │   │   ├── dashboard/
+│   │   │   │   ├── post-room/
+│   │   │   │   ├── update-room/
+│   │   │   │   ├── reservations/
+│   │   │   │   ├── guests/
+│   │   │   │   ├── check-in-out/
+│   │   │   │   ├── payments/
+│   │   │   │   ├── invoices/
+│   │   │   │   ├── promotions/
+│   │   │   │   ├── reviews/
+│   │   │   │   └── reports/
+│   │   │   └── admin-services/
+│   │   │
+│   │   └── customer/            # Customer module
+│   │       ├── components/
+│   │       │   ├── layout/      # Customer layout with sidebar
+│   │       │   ├── rooms/       # Browse rooms
+│   │       │   ├── view-bookings/
+│   │       │   ├── reviews/
+│   │       │   ├── notifications/
+│   │       │   └── promotions/
+│   │       └── services/
+│   │
+│   ├── app.component.*          # Root component
+│   └── app.module.ts            # Root module
+│
+├── assets/                      # Static assets
+└── styles.scss                  # Global styles
+```
+
+---
+
+## 5. Screenshots
+
+### Customer Portal
+- **Browse Rooms**: Grid layout with filters, room cards with images
+- **Book Room**: Modal with date picker and price breakdown
+- **My Bookings**: Table/card view with status badges
+- **Payment**: Razorpay checkout integration
+
+### Admin Panel
+- **Dashboard**: Room grid with edit/delete actions
+- **Reservations**: Table with status management
+- **Check-In/Out**: Guest management interface
+- **Reports**: Revenue and booking analytics
+
+---
+
+## 6. Installation
+
+### Prerequisites
+- Node.js 18+ and npm
+- Angular CLI 18+
+
+### Steps
+
+```bash
+# Clone the repository
+git clone https://github.com/sarthakpawar0912/Hotel-Management-Web.git
+cd Hotel-Management-Web
+
+# Install dependencies
+npm install
+
+# Install Angular CLI globally (if not installed)
+npm install -g @angular/cli
+```
+
+---
+
+## 7. Configuration
+
+### API Configuration
+Edit `src/app/modules/customer/services/customer.service.ts`:
+
+```typescript
+const BASIC_URL = "http://localhost:8080/";
+```
+
+### Razorpay Configuration
+The Razorpay key is received from the backend during payment creation.
+
+---
+
+## 8. Running the Application
+
+### Development Server
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navigate to `http://localhost:4200/`
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Production Build
 
 ```bash
-ng generate component component-name
+ng build --configuration production
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Build artifacts will be stored in the `dist/` directory.
 
-```bash
-ng generate --help
+---
+
+## 9. Customer Module
+
+### Layout
+The customer module uses a dedicated layout component with:
+- Fixed sidebar (240px width)
+- Navigation menu
+- Notification badge
+- Logout button
+
+### Pages
+
+| Page | Route | Description |
+|------|-------|-------------|
+| Browse Rooms | `/customer/rooms` | View and filter available rooms |
+| My Bookings | `/customer/bookings` | View booking history |
+| My Reviews | `/customer/reviews` | Manage submitted reviews |
+| Notifications | `/customer/notifications` | View notifications |
+| Promotions | `/customer/promotions` | View active promotions |
+
+### Booking Flow
+1. Browse rooms with filters
+2. Click "Book Now" on a room
+3. Select check-in and check-out dates
+4. View price breakdown (room rate + taxes)
+5. Confirm booking
+6. Wait for admin approval
+7. Make payment via Razorpay
+8. Receive confirmation email
+
+---
+
+## 10. Admin Module
+
+### Pages
+
+| Page | Route | Description |
+|------|-------|-------------|
+| Dashboard | `/admin/dashboard` | View all rooms |
+| Add Room | `/admin/room` | Create new room |
+| Edit Room | `/admin/room/:id` | Update room details |
+| Reservations | `/admin/reservations` | Manage bookings |
+| Check-In/Out | `/admin/check-in-out` | Guest management |
+| Guests | `/admin/guests` | View guest records |
+| Payments | `/admin/payments` | View payment history |
+| Invoices | `/admin/invoices` | View/generate invoices |
+| Promotions | `/admin/promotions` | Manage promo codes |
+| Reviews | `/admin/reviews` | View customer reviews |
+| Reports | `/admin/reports` | Analytics dashboard |
+
+---
+
+## 11. Razorpay Integration
+
+### How it Works
+
+```
+1. Customer clicks "Pay Now"
+           |
+           v
+2. Frontend calls: POST /api/customer/payments/create-order/{reservationId}
+           |
+           v
+3. Backend creates Razorpay order and returns order details
+           |
+           v
+4. Frontend opens Razorpay Checkout with order details
+           |
+           v
+5. Customer completes payment on Razorpay
+           |
+           v
+6. Razorpay returns: orderId, paymentId, signature
+           |
+           v
+7. Frontend calls: POST /api/customer/payments/verify
+           |
+           v
+8. Backend verifies signature and updates payment status
+           |
+           v
+9. Success message shown to customer
 ```
 
-## Building
+### Code Example
 
-To build the project run:
+```typescript
+// view-bookings.component.ts
 
-```bash
-ng build
+makePayment(booking: any): void {
+  // 1. Create order
+  this.customerService.createPaymentOrder(booking.id).subscribe({
+    next: (order) => {
+      // 2. Open Razorpay checkout
+      const options = {
+        key: order.key,
+        amount: order.amount,
+        currency: 'INR',
+        name: 'Hotel Management',
+        order_id: order.orderId,
+        handler: (response: any) => {
+          // 3. Verify payment
+          this.verifyPayment(response);
+        }
+      };
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    }
+  });
+}
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## 12. Styling & Theme
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Color Palette
+
+| Color | Hex Code | Usage |
+|-------|----------|-------|
+| Primary Purple | `#6a1b9a` | Headers, buttons, accents |
+| Light Purple | `#ab47bc` | Gradients, hover states |
+| Dark Purple | `#4a148c` | Sidebar, footer |
+| Success Green | `#52c41a` | Success states |
+| Error Red | `#ff4d4f` | Error states |
+| Warning Yellow | `#faad14` | Pending states |
+
+### Layout Classes
+
+```scss
+// Page header with gradient
+.page-header {
+  background: linear-gradient(135deg, #6a1b9a, #ab47bc);
+  color: white;
+  padding: 32px 24px;
+}
+
+// Content container
+.page-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+// Card grid
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+```
+
+### Responsive Breakpoints
+
+| Breakpoint | Max Width | Columns |
+|------------|-----------|---------|
+| Desktop | > 1200px | 3 columns |
+| Tablet | 992px | 2 columns |
+| Mobile | 768px | 1 column |
+
+---
+
+## Development Commands
 
 ```bash
+# Start development server
+ng serve
+
+# Build for production
+ng build --configuration production
+
+# Run tests
 ng test
+
+# Generate component
+ng generate component modules/customer/components/new-component
+
+# Generate service
+ng generate service modules/customer/services/new-service
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## Author
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-=======
-# 🏨 Hotel Management System
-
-Welcome to the **Hotel Management System** – a modern, scalable, and secure application built to streamline hotel operations! Powered by cutting-edge technologies like **Spring Boot 3**, **Spring Security 6**, **Angular 16**, **Ng Zorro UI**, and a **MySQL database**, this project offers an exceptional experience for both administrators and customers. 🚀
+**Sarthak Pawar**
+- GitHub: [@sarthakpawar0912](https://github.com/sarthakpawar0912)
 
 ---
 
-## ✨ Project Overview
-This application provides a seamless integration of backend and frontend technologies to manage hotel rooms, reservations, and user authentication. Whether you're an admin managing room listings or a customer booking your next stay, this system has you covered! 
+## License
 
----
-
-## 🛠️ Tech Stack
-- **Backend**: Spring Boot 3, Spring Security 6 (JWT Authentication)  
-- **Frontend**: Angular 16, Ng Zorro UI  
-- **Database**: MySQL  
-- **Tools**: Maven, npm  
-
----
-
-## 🔑 Key Features
-
-### 👩‍💼 Admin Module
-- **🔒 Secure Authentication**: Robust JWT-based authentication and authorization to protect APIs and ensure secure admin access.  
-- **🏠 Rooms Management**: Full control over room listings – add, update, delete, and view all rooms effortlessly.  
-- **📅 Reservation Requests**: Review and manage customer reservation requests with ease, approving or rejecting bookings as needed.  
-
-### 👤 Customer Module
-- **🔐 Secure Authentication**: Safe login with JWT token generation for accessing protected APIs.  
-- **🔍 Rooms Browsing**: Browse available rooms directly from the dashboard for a smooth user experience.  
-- **📝 Reservation Requests**: Submit reservation requests for specific dates in just a few clicks.  
-- **🕒 Past Reservations**: View a history of past reservation requests for quick reference.  
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- **Java 17** or higher  
-- **Node.js** (v16+) and npm  
-- **MySQL** (v8+)  
-- **Maven**  
-
-### Installation Steps
-1. **Clone the Repository**  
-   ```bash
-   git clone https://github.com/your-username/hotel-management-system.git
-   cd hotel-management-system
->>>>>>> 733fd8368220bf2e5af11189c1abedfa2008ced8
+This project is for educational and portfolio purposes.

@@ -1,98 +1,620 @@
-/* Centered Form Styling */
-.center-form {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-  background: linear-gradient(135deg, #6a0572, #a4508b); /* Stylish Gradient */
-  border-radius: 12px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+/* =============================================
+   MY BOOKINGS PAGE STYLES
+   ============================================= */
 
-/* Page Title */
-.page-title {
-  text-align: center;
-  font-size: 28px;
-  font-weight: bold;
-  color: #ffccff;
-  margin-bottom: 20px;
-}
-
-/* Table Container (Ensures Consistent Height) */
-.table-container {
-  width: 100%;
-  min-height: 300px; /* Ensures table does not shrink when records are fewer */
+/* Page Header */
+.page-header {
+  background: linear-gradient(135deg, #6a1b9a, #ab47bc);
+  color: white;
+  padding: 32px 24px;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  .header-content {
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 8px 0 0;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 16px;
+
+    .stat-item {
+      text-align: center;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      backdrop-filter: blur(5px);
+
+      .stat-value {
+        display: block;
+        font-size: 28px;
+        font-weight: 700;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        opacity: 0.85;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
 }
 
-/* Table Styling */
-nz-table {
-  background: transparent !important;
-  color: #fff !important;
-  width: 100%;
+/* Page Content Container */
+.page-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
 }
 
-nz-table thead {
-  background: rgba(255, 255, 255, 0.2) !important;
+/* Bookings Container */
+.bookings-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
 }
 
-nz-table th {
-  color: #ffccff !important;
-  font-size: 16px;
-  padding: 12px;
-  text-align: center;
+/* Empty State */
+.empty-state {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+
+  .empty-icon {
+    font-size: 80px;
+    color: #d9d9d9;
+  }
+
+  .empty-text {
+    text-align: center;
+
+    h3 {
+      font-size: 20px;
+      color: #333;
+      margin: 0 0 8px;
+    }
+
+    p {
+      color: #888;
+      margin: 0;
+    }
+  }
 }
 
-nz-table td {
-  text-align: center;
-  padding: 10px;
+/* Table Container */
+.table-container {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
-/* Status Tags Styling */
-nz-tag {
+/* Booking ID */
+.booking-id {
+  font-weight: 600;
+  color: #6a1b9a;
   font-size: 14px;
-  padding: 5px 12px;
-  border-radius: 8px;
-  font-weight: bold;
 }
 
-/* Status Tag Colors */
-nz-tag[ng-reflect-nz-color="processing"] {
-  background: #ffcc00 !important;
-  color: black !important;
+/* Room Info */
+.room-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .room-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+  }
+
+  .room-type {
+    nz-tag {
+      font-size: 11px;
+    }
+  }
 }
 
-nz-tag[ng-reflect-nz-color="success"] {
-  background: #00cc66 !important;
-  color: white !important;
+/* Date Info */
+.date-info {
+  display: flex;
+  flex-direction: column;
+
+  .date {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+  }
+
+  .year {
+    font-size: 12px;
+    color: #888;
+  }
 }
 
-nz-tag[ng-reflect-nz-color="error"] {
-  background: #ff3333 !important;
-  color: white !important;
+/* Nights Badge */
+.nights-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #f0e6ff;
+  color: #6a1b9a;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 14px;
 }
 
-/* Pagination Styling */
-.pagination {
+/* Amount Info */
+.amount-info {
+  display: flex;
+  flex-direction: column;
+
+  .total-amount {
+    font-weight: 700;
+    font-size: 16px;
+    color: #6a1b9a;
+  }
+
+  .base-price {
+    font-size: 12px;
+    color: #888;
+  }
+}
+
+/* Status Badges */
+.status-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .status-tag, .payment-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+  }
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+/* Status Info */
+.status-info {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &.pending {
+    color: #faad14;
+  }
+
+  &.rejected {
+    color: #ff4d4f;
+  }
+
+  &.cancelled {
+    color: #999;
+  }
+}
+
+/* Cancelled Row */
+.cancelled-row {
+  opacity: 0.6;
+  background: #fafafa;
+}
+
+/* Pagination */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+/* Mobile View - Cards */
+.mobile-view {
+  display: none;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.booking-card {
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+  &.cancelled {
+    opacity: 0.7;
+    background: #fafafa;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .card-room {
+    margin-bottom: 16px;
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+  }
+
+  .card-dates {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    margin-bottom: 16px;
+
+    .date-block {
+      flex: 1;
+
+      .label {
+        display: block;
+        font-size: 12px;
+        color: #888;
+        margin-bottom: 4px;
+      }
+
+      .value {
+        font-weight: 600;
+        color: #333;
+      }
+    }
+
+    .arrow {
+      color: #ccc;
+      font-size: 20px;
+    }
+  }
+
+  .card-amount {
+    margin-bottom: 16px;
+    padding: 16px;
+    background: #faf5ff;
+    border-radius: 10px;
+
+    .amount-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 14px;
+
+      &.tax {
+        color: #888;
+        font-size: 13px;
+      }
+
+      &.total {
+        font-weight: 700;
+        font-size: 16px;
+        color: #6a1b9a;
+        padding-top: 12px;
+        margin-top: 8px;
+        border-top: 1px dashed #e0d0f0;
+      }
+    }
+  }
+
+  .card-footer {
+    margin-bottom: 16px;
+  }
+
+  .card-actions {
+    .action-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+
+      button {
+        flex: 1;
+      }
+    }
+  }
+}
+
+/* Invoice Modal Styles */
+.invoice-view {
+  padding: 16px;
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  .hotel-info {
+    h2 {
+      margin: 0;
+      color: #6a1b9a;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 4px 0 0;
+      color: #666;
+      font-size: 14px;
+    }
+  }
+
+  .invoice-number {
+    text-align: right;
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      color: #333;
+      font-family: monospace;
+    }
+  }
+}
+
+.invoice-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+
+  .info-section {
+    h4 {
+      color: #6a1b9a;
+      margin: 0 0 12px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #333;
+    }
+  }
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    background: #faf5ff;
+    padding: 14px;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #e0d0f0;
+  }
+
+  td {
+    padding: 14px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+
+  .text-right {
+    text-align: right;
+  }
+
+  .text-muted {
+    color: #888;
+  }
+}
+
+.invoice-summary {
+  max-width: 400px;
+  margin-left: auto;
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 14px;
+
+    &.tax {
+      color: #666;
+    }
+
+    &.total-tax {
+      font-weight: 500;
+      background: #f5f5f5;
+      padding: 10px 14px;
+      margin: 0 -14px;
+      border-radius: 6px;
+    }
+
+    &.grand-total {
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #6a1b9a 0%, #ab47bc 100%);
+      color: #fff;
+      padding: 14px 18px;
+      margin: 10px -18px 0;
+      border-radius: 10px;
+    }
+
+    &.paid span:last-child {
+      color: #52c41a;
+      font-weight: 600;
+    }
+
+    &.balance span:last-child {
+      color: #ff4d4f;
+      font-weight: 600;
+    }
+
+    &.discount span:last-child {
+      color: #52c41a;
+    }
+  }
+}
+
+.text-success {
+  color: #52c41a !important;
+}
+
+.text-danger {
+  color: #ff4d4f !important;
+}
+
+.invoice-footer {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px dashed #e8e8e8;
+
+  p {
+    margin: 4px 0;
+    color: #666;
+
+    &.small {
+      font-size: 12px;
+      color: #999;
+    }
+  }
 }
 
-nz-pagination {
-  background: transparent !important;
+/* Table Hover Effect */
+::ng-deep {
+  .ant-table-tbody > tr:hover > td {
+    background: #faf5ff !important;
+  }
+
+  .ant-table-thead > tr > th {
+    background: #faf5ff;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .ant-table-tbody > tr.cancelled-row:hover > td {
+    background: #f5f5f5 !important;
+  }
 }
 
+/* =============================================
+   RESPONSIVE STYLES
+   ============================================= */
 
-nz-pagination .ant-pagination-item-active {
-  background-color: #ffccff !important;
-  border-color: #ff66ff !important;
+@media (max-width: 992px) {
+  .desktop-view {
+    display: none;
+  }
+
+  .mobile-view {
+    display: block;
+  }
+
+  .page-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px 20px;
+
+    .header-stats {
+      width: 100%;
+      justify-content: center;
+
+      .stat-item {
+        flex: 1;
+        max-width: 120px;
+      }
+    }
+  }
+
+  .cards-container {
+    grid-template-columns: 1fr;
+  }
 }
 
-nz-pagination .ant-pagination-item a {
-  color: white !important;
+@media (max-width: 768px) {
+  .bookings-container {
+    padding: 16px;
+  }
+
+  .page-header {
+    .header-content {
+      h1 {
+        font-size: 24px;
+      }
+    }
+
+    .header-stats {
+      gap: 12px;
+
+      .stat-item {
+        padding: 10px 16px;
+
+        .stat-value {
+          font-size: 22px;
+        }
+
+        .stat-label {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+
+  .invoice-info-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .invoice-header {
+    flex-direction: column;
+    gap: 16px;
+
+    .invoice-number {
+      text-align: left;
+    }
+  }
+
+  .invoice-summary {
+    max-width: 100%;
+  }
 }

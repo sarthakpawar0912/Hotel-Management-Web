@@ -1,70 +1,257 @@
-<!-- Loader -->
-<nz-spin *ngIf="loading"></nz-spin>
-
-
-<!-- No Rooms Message -->
-<div *ngIf="!loading && rooms.length === 0" class="no-rooms">
-  <p>No rooms available.</p>
+<!-- Page Header -->
+<div class="page-header">
+  <div class="header-content">
+    <h1>Available Rooms</h1>
+    <p>Find your perfect room and book your stay with us</p>
+  </div>
 </div>
 
-<!-- Room Wrapper (Fixes Pagination Issue) -->
-<div class="room-wrapper">
- 
-  <!-- Room List -->
-  <div class="room-container" *ngIf="rooms.length > 0">
-    <div class="room-row" *ngFor="let room of rooms">
-      <nz-card style="width: 300px; margin: 16px" [nzActions]="[actionBook]">
-        <nz-skeleton [nzActive]="true" [nzLoading]="loading" [nzAvatar]="true">
-          <nz-card-meta [nzAvatar]="avatarTemplate" nzTitle="{{ room.name }}" nzDescription="Type: {{ room.type }}">
-          </nz-card-meta>
-          <nz-card-meta style="margin-left: 49px" nzDescription="Price: ₹{{ room.price }}">
-          </nz-card-meta>
-        </nz-skeleton>
-      </nz-card>
+<!-- Page Content Container -->
+<div class="page-content">
+  <!-- Search and Filter Section -->
+  <div class="search-filter-section">
+    <div class="filter-header">
+      <h3><span nz-icon nzType="filter"></span> Filter Rooms</h3>
+      <span class="results-count" *ngIf="!loading">{{ total }} room(s) found</span>
+    </div>
 
-      <!-- Avatar Template -->
-      <ng-template #avatarTemplate>
-        <nz-avatar nzSrc="https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4"></nz-avatar>
-      </ng-template>
+    <div nz-row [nzGutter]="[16, 16]" nzAlign="middle">
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+        <label class="filter-label">Search</label>
+        <nz-input-group [nzPrefix]="prefixSearch">
+          <input nz-input placeholder="Room name..." [(ngModel)]="searchName" (keyup.enter)="onSearch()" />
+        </nz-input-group>
+        <ng-template #prefixSearch>
+          <span nz-icon nzType="search"></span>
+        </ng-template>
+      </div>
 
-      <!-- Book Room Action -->
-      <ng-template #actionBook>
-        <span nz-icon nzType="check-square" [nzTheme]="'twotone'" class="icon" (click)="showModalMiddle(room.id)">
-        </span>
-      </ng-template>
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="5">
+        <label class="filter-label">Room Type</label>
+        <nz-select [(ngModel)]="searchType" nzPlaceHolder="All Types" nzAllowClear style="width: 100%;">
+          <nz-option *ngFor="let type of roomTypes" [nzValue]="type" [nzLabel]="type"></nz-option>
+        </nz-select>
+      </div>
+
+      <div nz-col [nzXs]="12" [nzSm]="6" [nzMd]="4">
+        <label class="filter-label">Min Price</label>
+        <nz-input-number [(ngModel)]="minPrice" [nzMin]="0" nzPlaceHolder="₹ Min"
+                         [nzFormatter]="priceFormatter" [nzParser]="priceParser" style="width: 100%;"></nz-input-number>
+      </div>
+
+      <div nz-col [nzXs]="12" [nzSm]="6" [nzMd]="4">
+        <label class="filter-label">Max Price</label>
+        <nz-input-number [(ngModel)]="maxPrice" [nzMin]="0" nzPlaceHolder="₹ Max"
+                         [nzFormatter]="priceFormatter" [nzParser]="priceParser" style="width: 100%;"></nz-input-number>
+      </div>
+
+      <div nz-col [nzXs]="12" [nzSm]="6" [nzMd]="3">
+        <label class="filter-label">Guests</label>
+        <nz-input-number [(ngModel)]="filterCapacity" [nzMin]="1" [nzMax]="10" nzPlaceHolder="Guests"
+          style="width: 100%;"></nz-input-number>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="24" class="filter-actions">
+        <button nz-button nzType="primary" (click)="onSearch()" nzSize="large">
+          <span nz-icon nzType="search"></span> Search
+        </button>
+        <button nz-button (click)="clearFilters()" *ngIf="isSearchMode" nzSize="large">
+          <span nz-icon nzType="close"></span> Clear Filters
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- Pagination (Fixed at Bottom) -->
-  <div class="pagination">
-    <nz-pagination 
-      [nzPageIndex]="currentpage" 
-      [nzTotal]="total" 
-      [nzPageSize]="10" 
+  <!-- Loading Skeleton -->
+  <div class="skeleton-grid" *ngIf="loading">
+    <nz-card *ngFor="let i of [1,2,3,4,5,6]" class="room-card skeleton-card">
+      <nz-skeleton [nzActive]="true" [nzAvatar]="false" [nzParagraph]="{ rows: 4 }">
+      </nz-skeleton>
+    </nz-card>
+  </div>
+
+  <!-- No Rooms Found -->
+  <div *ngIf="!loading && rooms.length === 0" class="empty-state">
+    <nz-empty [nzNotFoundImage]="emptyImage" [nzNotFoundContent]="emptyContent" [nzNotFoundFooter]="emptyFooter">
+      <ng-template #emptyImage>
+        <span nz-icon nzType="inbox" class="empty-icon"></span>
+      </ng-template>
+      <ng-template #emptyContent>
+        <div class="empty-text">
+          <h3>{{ isSearchMode ? 'No rooms match your criteria' : 'No rooms available' }}</h3>
+          <p>{{ isSearchMode ? 'Try adjusting your filters or search terms' : 'Please check back later for available rooms' }}</p>
+        </div>
+      </ng-template>
+      <ng-template #emptyFooter>
+        <button nz-button nzType="primary" (click)="clearFilters()" *ngIf="isSearchMode">
+          <span nz-icon nzType="reload"></span> Reset Filters
+        </button>
+      </ng-template>
+    </nz-empty>
+  </div>
+
+  <!-- Room Grid -->
+  <div class="room-grid" *ngIf="!loading && rooms.length > 0">
+    <nz-card *ngFor="let room of rooms" [nzCover]="coverTemplate" class="room-card" [nzBorderless]="true">
+      <!-- Room Type Badge -->
+      <nz-ribbon [nzText]="room.type" nzColor="purple" *ngIf="room.type">
+        <div class="card-content">
+          <div class="room-header">
+            <h3 class="room-name">{{ room.name }}</h3>
+            <div class="availability-badge" *ngIf="room.available !== false">
+              <span nz-icon nzType="check-circle" nzTheme="fill"></span> Available
+            </div>
+          </div>
+
+          <div class="room-info">
+            <div class="info-item" *ngIf="room.capacity">
+              <span nz-icon nzType="team"></span>
+              <span>{{ room.capacity }} Guest{{ room.capacity > 1 ? 's' : '' }}</span>
+            </div>
+            <div class="info-item" *ngIf="room.floorNumber">
+              <span nz-icon nzType="build"></span>
+              <span>Floor {{ room.floorNumber }}</span>
+            </div>
+            <div class="info-item" *ngIf="room.roomNumber">
+              <span nz-icon nzType="number"></span>
+              <span>Room #{{ room.roomNumber }}</span>
+            </div>
+          </div>
+
+          <p class="room-description" *ngIf="room.description">
+            {{ room.description | slice:0:100 }}{{ room.description?.length > 100 ? '...' : '' }}
+          </p>
+
+          <div class="room-footer">
+            <div class="price-section">
+              <span class="price">₹{{ room.price | number }}</span>
+              <span class="per-night">/night</span>
+            </div>
+            <button nz-button nzType="primary" (click)="showModalMiddle(room)" nzShape="round">
+              <span nz-icon nzType="calendar"></span> Book Now
+            </button>
+          </div>
+        </div>
+      </nz-ribbon>
+
+      <!-- Cover Image Template -->
+      <ng-template #coverTemplate>
+        <div class="room-image-container">
+          <img [src]="getRoomImage(room)" alt="{{ room.name }}" class="room-cover-image"
+               (error)="room.imageError = true" />
+          <div class="image-overlay">
+            <button nz-button nzType="primary" nzGhost nzShape="round" (click)="showModalMiddle(room)">
+              View Details
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </nz-card>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination-section" *ngIf="!loading && rooms.length > 0">
+    <nz-pagination
+      [nzPageIndex]="currentpage"
+      [nzTotal]="total"
+      [nzPageSize]="10"
+      [nzShowSizeChanger]="false"
+      [nzShowQuickJumper]="total > 50"
       (nzPageIndexChange)="pageIndexChange($event)">
     </nz-pagination>
+    <span class="pagination-info">Showing {{ (currentpage - 1) * 10 + 1 }} - {{ Math.min(currentpage * 10, total) }} of {{ total }}</span>
   </div>
 </div>
 
 <!-- Book Room Modal -->
-<nz-modal nzTitle="Book Room" nzCentered [(nzVisible)]="isVisibleMiddle" (nzOnCancel)="handleCancelMiddle()" (nzOnOk)="handleOkMiddle()">
-  <ng-container *nzModalContent>
-    <div class="modal-content">
-      <label>Check-in Date</label>
-      <nz-date-picker
-        style="width: 100%;"
-        [(ngModel)]="checkInDate"
-        (ngModelChange)="onCheckInChange($event)">
-      </nz-date-picker>
+<nz-modal [nzTitle]="modalTitle" nzCentered [(nzVisible)]="isVisibleMiddle" (nzOnCancel)="handleCancelMiddle()"
+  (nzOnOk)="handleOkMiddle()" nzOkText="Confirm Booking" [nzOkDisabled]="!checkInDate || !checkOutDate"
+  [nzWidth]="550" nzClassName="booking-modal">
 
-      <label>Check-out Date</label>
-      <nz-date-picker
-        style="width: 100%;"
-        [(ngModel)]="checkOutDate"
-        (ngModelChange)="onCheckOutChange($event)"
-        [nzDisabledDate]="disableCheckOutDate">
-      </nz-date-picker>
+  <ng-template #modalTitle>
+    <div class="modal-title">
+      <span nz-icon nzType="calendar" nzTheme="fill"></span>
+      <span>Book Your Stay</span>
     </div>
-    
+  </ng-template>
+
+  <ng-container *nzModalContent>
+    <div class="booking-modal-content">
+      <!-- Room Summary -->
+      <div class="room-summary" *ngIf="selectedRoom">
+        <img [src]="getRoomImage(selectedRoom)" alt="{{ selectedRoom?.name }}" class="room-modal-image" />
+        <div class="room-summary-info">
+          <nz-tag nzColor="purple">{{ selectedRoom?.type }}</nz-tag>
+          <h3>{{ selectedRoom?.name }}</h3>
+          <div class="room-meta">
+            <span *ngIf="selectedRoom?.capacity">
+              <span nz-icon nzType="team"></span> {{ selectedRoom?.capacity }} Guests
+            </span>
+            <span *ngIf="selectedRoom?.roomNumber">
+              <span nz-icon nzType="home"></span> Room #{{ selectedRoom?.roomNumber }}
+            </span>
+          </div>
+          <div class="modal-price">₹{{ selectedRoom?.price | number }}<small>/night</small></div>
+        </div>
+      </div>
+
+      <nz-divider nzText="Select Dates" nzOrientation="left"></nz-divider>
+
+      <!-- Date Selection -->
+      <div class="date-selection">
+        <div class="date-field">
+          <label><span nz-icon nzType="login"></span> Check-in</label>
+          <nz-date-picker
+            style="width: 100%;"
+            [(ngModel)]="checkInDate"
+            (ngModelChange)="onCheckInChange($event)"
+            [nzDisabledDate]="disableCheckInDate"
+            nzPlaceHolder="Select check-in date"
+            nzFormat="dd MMM yyyy">
+          </nz-date-picker>
+        </div>
+
+        <div class="date-field">
+          <label><span nz-icon nzType="logout"></span> Check-out</label>
+          <nz-date-picker
+            style="width: 100%;"
+            [(ngModel)]="checkOutDate"
+            (ngModelChange)="onCheckOutChange($event)"
+            [nzDisabledDate]="disableCheckOutDate"
+            nzPlaceHolder="Select check-out date"
+            nzFormat="dd MMM yyyy">
+          </nz-date-picker>
+        </div>
+      </div>
+
+      <!-- Price Breakdown -->
+      <div class="price-breakdown" *ngIf="checkInDate && checkOutDate">
+        <nz-divider></nz-divider>
+
+        <div class="breakdown-row">
+          <span>Room Rate ({{ getNights() }} night{{ getNights() > 1 ? 's' : '' }})</span>
+          <span>₹{{ getEstimatedPrice() | number }}</span>
+        </div>
+
+        <div class="breakdown-row tax">
+          <span>Taxes & Fees (18% GST)</span>
+          <span>₹{{ getEstimatedTax() | number }}</span>
+        </div>
+
+        <nz-divider dashed></nz-divider>
+
+        <div class="breakdown-row total">
+          <span>Estimated Total</span>
+          <span class="total-price">₹{{ getEstimatedTotal() | number }}</span>
+        </div>
+
+        <nz-alert
+          nzType="info"
+          nzMessage="Payment will be collected after booking approval"
+          [nzShowIcon]="true"
+          class="booking-info">
+        </nz-alert>
+      </div>
+    </div>
   </ng-container>
 </nz-modal>

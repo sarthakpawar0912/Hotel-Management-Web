@@ -1,0 +1,141 @@
+<!-- Page Header -->
+<div class="page-header">
+  <div class="header-content">
+    <h1>
+      <span nz-icon nzType="gift" nzTheme="fill"></span>
+      Special Offers & Promotions
+    </h1>
+    <p>Exclusive deals to make your stay more affordable</p>
+  </div>
+  <div class="header-stats" *ngIf="promotions.length > 0">
+    <div class="stat">
+      <span class="value">{{ promotions.length }}</span>
+      <span class="label">Active Offers</span>
+    </div>
+  </div>
+</div>
+
+<div class="promotions-container">
+  <nz-spin [nzSpinning]="loading">
+    <!-- Info Alert -->
+    <nz-alert
+      *ngIf="!loading && promotions.length > 0"
+      class="info-alert"
+      nzType="info"
+      nzMessage="How to use promo codes"
+      nzDescription="Copy any promo code below and apply it during checkout to avail the discount. Terms and conditions apply."
+      nzShowIcon>
+    </nz-alert>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && promotions.length === 0" class="empty-state">
+      <nz-empty [nzNotFoundImage]="emptyImage" [nzNotFoundContent]="emptyContent">
+        <ng-template #emptyImage>
+          <span nz-icon nzType="gift" class="empty-icon"></span>
+        </ng-template>
+        <ng-template #emptyContent>
+          <div class="empty-text">
+            <h3>No active promotions right now</h3>
+            <p>Check back later for exclusive deals and discounts on your next booking!</p>
+          </div>
+        </ng-template>
+      </nz-empty>
+    </div>
+
+    <!-- Promotions Grid -->
+    <div class="promotions-grid" *ngIf="promotions.length > 0">
+      <div *ngFor="let promo of promotions" class="promo-card-wrapper">
+        <nz-ribbon
+          [nzText]="getDiscountText(promo)"
+          [nzColor]="isExpiringSoon(promo.endDate) ? '#faad14' : '#6a1b9a'">
+          <nz-card class="promo-card" [class.expiring-soon]="isExpiringSoon(promo.endDate)">
+            <!-- Expiring Soon Badge -->
+            <div class="expiring-badge" *ngIf="isExpiringSoon(promo.endDate)">
+              <span nz-icon nzType="clock-circle"></span>
+              Expires in {{ getDaysLeft(promo.endDate) }} day{{ getDaysLeft(promo.endDate) > 1 ? 's' : '' }}
+            </div>
+
+            <!-- Promo Header -->
+            <div class="promo-header">
+              <div class="promo-icon" [ngClass]="promo.discountType === 'PERCENTAGE' ? 'percentage' : 'fixed'">
+                <span nz-icon [nzType]="promo.discountType === 'PERCENTAGE' ? 'percentage' : 'dollar'" nzTheme="outline"></span>
+              </div>
+              <div class="promo-title">
+                <h3>{{ promo.name }}</h3>
+                <nz-tag [nzColor]="getPromoTypeColor(promo)">{{ getPromoTypeLabel(promo) }}</nz-tag>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <p class="description">{{ promo.description }}</p>
+
+            <!-- Promo Code Section -->
+            <div class="promo-code-section">
+              <label>Promo Code</label>
+              <div class="promo-code">
+                <span class="code">{{ promo.code }}</span>
+                <button nz-button nzType="primary" (click)="copyCode(promo.code)">
+                  <span nz-icon nzType="copy"></span>
+                  Copy Code
+                </button>
+              </div>
+            </div>
+
+            <!-- Promo Details -->
+            <div class="promo-details">
+              <div class="detail-item" *ngIf="promo.minBookingAmount">
+                <span class="detail-icon">
+                  <span nz-icon nzType="shopping-cart"></span>
+                </span>
+                <span class="detail-text">
+                  Minimum booking: <strong>{{ promo.minBookingAmount | currency:'INR':'symbol':'1.0-0' }}</strong>
+                </span>
+              </div>
+              <div class="detail-item" *ngIf="promo.maxDiscountAmount">
+                <span class="detail-icon">
+                  <span nz-icon nzType="wallet"></span>
+                </span>
+                <span class="detail-text">
+                  Maximum savings: <strong>{{ promo.maxDiscountAmount | currency:'INR':'symbol':'1.0-0' }}</strong>
+                </span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-icon">
+                  <span nz-icon nzType="calendar"></span>
+                </span>
+                <span class="detail-text">
+                  Valid until: <strong>{{ promo.endDate | date:'dd MMM yyyy' }}</strong>
+                </span>
+              </div>
+              <div class="detail-item" *ngIf="promo.usageLimit">
+                <span class="detail-icon">
+                  <span nz-icon nzType="team"></span>
+                </span>
+                <span class="detail-text">
+                  Limited to <strong>{{ promo.usageLimit }}</strong> uses
+                </span>
+              </div>
+            </div>
+
+            <!-- Terms & Conditions -->
+            <div class="terms" *ngIf="promo.termsAndConditions">
+              <nz-collapse nzGhost>
+                <nz-collapse-panel nzHeader="Terms & Conditions" [nzActive]="false">
+                  {{ promo.termsAndConditions }}
+                </nz-collapse-panel>
+              </nz-collapse>
+            </div>
+
+            <!-- Promo Footer -->
+            <div class="promo-footer">
+              <div class="validity-status" [class.expiring]="isExpiringSoon(promo.endDate)">
+                <span nz-icon [nzType]="isExpiringSoon(promo.endDate) ? 'warning' : 'check-circle'"></span>
+                {{ isExpiringSoon(promo.endDate) ? 'Hurry! Offer ending soon' : 'Active and ready to use' }}
+              </div>
+            </div>
+          </nz-card>
+        </nz-ribbon>
+      </div>
+    </div>
+  </nz-spin>
+</div>

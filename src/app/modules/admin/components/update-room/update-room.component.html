@@ -1,31 +1,128 @@
-<div class="room-details-form-container">
-  
-  <nz-form [formGroup]="updateRoomForm" nzLayout="vertical" class="room-details-form">
-    <div class="form-title">Update Room Details</div>
+<div class="page-container">
+  <div class="form-card">
+    <nz-spin [nzSpinning]="loading">
+      <div class="form-header">
+        <h2>
+          <span nz-icon nzType="edit" nzTheme="outline"></span>
+          Update Room Details
+        </h2>
+        <p>Modify the room information below</p>
+      </div>
 
-    <nz-form-item>
-      <nz-form-control [nzSpan]="16" [nzOffset]="4">
-        <input nz-input formControlName="name" placeholder="Room Name" />
-      </nz-form-control>
-    </nz-form-item>
+      <nz-form [formGroup]="updateRoomForm" nzLayout="vertical">
+        <!-- Room Image Upload -->
+        <nz-form-item>
+          <nz-form-label>Room Image</nz-form-label>
+          <nz-form-control>
+            <div class="image-upload-container">
+              <input type="file" #fileInput accept="image/*" (change)="onFileSelected($event)" style="display: none;" />
 
-    <nz-form-item>
-      <nz-form-control [nzSpan]="16" [nzOffset]="4">
-        <input nz-input formControlName="type" placeholder="Room Type" />
-      </nz-form-control>
-    </nz-form-item>
+              <div *ngIf="!imagePreview" class="upload-placeholder" (click)="fileInput.click()">
+                <span nz-icon nzType="cloud-upload" nzTheme="outline"></span>
+                <div class="upload-text">Click to upload image</div>
+                <div class="upload-hint">Max 5MB (JPG, PNG)</div>
+              </div>
 
-    <nz-form-item>
-      <nz-form-control [nzSpan]="16" [nzOffset]="4">
-        <input nz-input formControlName="price" type="number" placeholder="Room Price" />
-      </nz-form-control>
-    </nz-form-item>
+              <div *ngIf="imagePreview" class="image-preview-container">
+                <img [src]="imagePreview" alt="Room Preview" class="image-preview" />
+                <div class="image-actions">
+                  <button nz-button nzType="default" nzDanger nzSize="small" (click)="removeImage()">
+                    <span nz-icon nzType="delete"></span> Remove
+                  </button>
+                  <button nz-button nzType="default" nzSize="small" (click)="fileInput.click()">
+                    <span nz-icon nzType="upload"></span> Change
+                  </button>
+                </div>
+              </div>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
 
-  
-    <nz-form-item>
-      <nz-form-control [nzSpan]="16" [nzOffset]="4">
-        <button nz-button nzType="primary" [disabled]="updateRoomForm.invalid" (click)="submitForm()">Update</button>
-      </nz-form-control>
-    </nz-form-item>
-  </nz-form>
+        <nz-divider></nz-divider>
+
+        <!-- Room Name & Number Row -->
+        <div nz-row [nzGutter]="16">
+          <div nz-col [nzSpan]="12" [nzXs]="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Room Name</nz-form-label>
+              <nz-form-control nzErrorTip="Please enter room name">
+                <input nz-input formControlName="name" placeholder="e.g., Ocean View Suite" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="12" [nzXs]="24">
+            <nz-form-item>
+              <nz-form-label>Room Number</nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="roomNumber" placeholder="e.g., 101, A-201" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <!-- Room Type & Price Row -->
+        <div nz-row [nzGutter]="16">
+          <div nz-col [nzSpan]="12" [nzXs]="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Room Type</nz-form-label>
+              <nz-form-control nzErrorTip="Please select room type">
+                <nz-select formControlName="type" nzPlaceHolder="Select Room Type" nzShowSearch>
+                  <nz-option *ngFor="let type of roomTypes" [nzValue]="type" [nzLabel]="type"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="12" [nzXs]="24">
+            <nz-form-item>
+              <nz-form-label nzRequired>Price per Night</nz-form-label>
+              <nz-form-control nzErrorTip="Please enter price">
+                <nz-input-number formControlName="price" [nzMin]="1" [nzStep]="100" style="width: 100%;"
+                  [nzFormatter]="formatterRupee" [nzParser]="parserRupee"></nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <!-- Capacity & Floor Row -->
+        <div nz-row [nzGutter]="16">
+          <div nz-col [nzSpan]="12" [nzXs]="24">
+            <nz-form-item>
+              <nz-form-label>Capacity (Guests)</nz-form-label>
+              <nz-form-control>
+                <nz-input-number formControlName="capacity" [nzMin]="1" [nzMax]="10" style="width: 100%;"></nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="12" [nzXs]="24">
+            <nz-form-item>
+              <nz-form-label>Floor Number</nz-form-label>
+              <nz-form-control>
+                <nz-input-number formControlName="floorNumber" [nzMin]="0" style="width: 100%;"></nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <nz-form-item>
+          <nz-form-label>Description</nz-form-label>
+          <nz-form-control>
+            <textarea nz-input formControlName="description" placeholder="Describe the room features, amenities, view, etc."
+              [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- Submit Button -->
+        <nz-form-item class="form-actions">
+          <button nz-button nzType="default" routerLink="/admin/dashboard" style="margin-right: 12px;">
+            <span nz-icon nzType="arrow-left"></span> Back
+          </button>
+          <button nz-button nzType="primary" nzSize="large" [nzLoading]="isSubmitting"
+            [disabled]="updateRoomForm.invalid || isSubmitting" (click)="submitForm()">
+            <span nz-icon nzType="edit"></span> Update Room
+          </button>
+        </nz-form-item>
+      </nz-form>
+    </nz-spin>
+  </div>
 </div>

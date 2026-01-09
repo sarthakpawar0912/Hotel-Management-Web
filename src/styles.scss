@@ -1,1 +1,253 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles */
+
+// Reset and base styles
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #f5f5f5;
+}
+
+// Ensure Angular root takes full height
+app-root {
+  display: block;
+  min-height: 100vh;
+}
+
+// Global Ng-Zorro layout overrides
+.ant-layout {
+  min-height: 100vh;
+  background: #f5f5f5 !important;
+}
+
+.ant-layout-content {
+  background: #f5f5f5 !important;
+}
+
+// Fix for content going under sidebar
+.ant-layout-sider-children {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+// Ensure proper z-index layering
+.ant-layout-sider {
+  z-index: 1000 !important;
+}
+
+.ant-modal-wrap {
+  z-index: 1050 !important;
+}
+
+.ant-message {
+  z-index: 1100 !important;
+}
+
+.ant-notification {
+  z-index: 1100 !important;
+}
+
+// Global scrollbar styling
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+
+  &:hover {
+    background: #a8a8a8;
+  }
+}
+
+// Fix table overflow
+.ant-table-wrapper {
+  overflow-x: auto;
+}
+
+// Ensure modals are above everything
+.ant-modal-mask {
+  z-index: 1040 !important;
+}
+
+// Global button styles
+.ant-btn-primary {
+  background: linear-gradient(135deg, #6a1b9a, #ab47bc) !important;
+  border: none !important;
+
+  &:hover, &:focus {
+    background: linear-gradient(135deg, #7b1fa2, #ba68c8) !important;
+  }
+}
+
+// Global card hover effect
+.ant-card {
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// =============================================
+// GLOBAL PAGE LAYOUT CLASSES
+// =============================================
+
+// Page container - wraps all page content and centers it
+.page-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(100vh - 56px);
+  padding: 24px;
+  background: #f5f6fa;
+}
+
+// Page content - centered content wrapper
+.page-content {
+  max-width: 1200px;
+  width: 100%;
+}
+
+// Form card - centered form container
+.form-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 32px;
+
+  &.wide {
+    max-width: 1000px;
+  }
+
+  &.narrow {
+    max-width: 600px;
+  }
+}
+
+// Table wrapper - centered table container
+.table-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  overflow-x: auto;
+}
+
+// Page header with gradient
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #6a1b9a, #ab47bc);
+  color: #fff;
+  margin: -24px -24px 24px -24px;
+  border-radius: 12px 12px 0 0;
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+}
+
+// Stats row
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+// Filter section
+.filter-section {
+  background: #fafafa;
+  padding: 16px 24px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+// Cards container - for card grids
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+// Empty state
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  padding: 40px;
+  text-align: center;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .page-container {
+    padding: 16px;
+  }
+
+  .form-card {
+    padding: 20px;
+    margin: 0 8px;
+  }
+
+  .table-wrapper {
+    padding: 16px;
+    margin: 0 8px;
+  }
+
+  .page-header {
+    padding: 16px;
+    margin: -16px -16px 16px -16px;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .cards-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+// Print styles
+@media print {
+  .ant-layout-sider,
+  nz-sider {
+    display: none !important;
+  }
+
+  .content-layout {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  nz-footer {
+    display: none !important;
+  }
+}

@@ -1,0 +1,260 @@
+<div class="invoices-container">
+  <!-- Header -->
+  <div class="page-header">
+    <h2>Invoice Management</h2>
+    <div class="header-stats">
+      <nz-tag nzColor="blue">Total: {{ getTotalStats().total }}</nz-tag>
+      <nz-tag nzColor="red">Outstanding: {{ getTotalStats().outstandingAmount | currency:'INR':'symbol':'1.0-0' }}</nz-tag>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-section">
+    <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="6" [nzLg]="6">
+        <nz-card class="stat-card">
+          <nz-statistic [nzValue]="getTotalStats().total" [nzTitle]="'Total Invoices'"
+                        [nzPrefix]="totalIcon" [nzValueStyle]="{ color: '#6a1b9a' }"></nz-statistic>
+          <ng-template #totalIcon><span nz-icon nzType="file-text"></span></ng-template>
+        </nz-card>
+      </div>
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="6" [nzLg]="6">
+        <nz-card class="stat-card">
+          <nz-statistic [nzValue]="getTotalStats().paid" [nzTitle]="'Paid Invoices'"
+                        [nzPrefix]="paidIcon" [nzValueStyle]="{ color: '#52c41a' }"></nz-statistic>
+          <ng-template #paidIcon><span nz-icon nzType="check-circle"></span></ng-template>
+        </nz-card>
+      </div>
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="6" [nzLg]="6">
+        <nz-card class="stat-card">
+          <nz-statistic [nzValue]="getTotalStats().unpaid" [nzTitle]="'Unpaid Invoices'"
+                        [nzPrefix]="unpaidIcon" [nzValueStyle]="{ color: '#ff4d4f' }"></nz-statistic>
+          <ng-template #unpaidIcon><span nz-icon nzType="warning"></span></ng-template>
+        </nz-card>
+      </div>
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="6" [nzLg]="6">
+        <nz-card class="stat-card">
+          <nz-statistic [nzValue]="getTotalStats().totalAmount" [nzTitle]="'Total Revenue'"
+                        [nzPrefix]="'₹'" [nzValueStyle]="{ color: '#1890ff' }"></nz-statistic>
+        </nz-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <div nz-row [nzGutter]="[16, 16]" nzAlign="middle">
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+        <nz-select [(ngModel)]="filterStatus" nzPlaceHolder="Filter by Status" style="width: 100%;" (ngModelChange)="applyFilter()">
+          <nz-option nzValue="all" nzLabel="All Invoices"></nz-option>
+          <nz-option nzValue="paid" nzLabel="Paid Only"></nz-option>
+          <nz-option nzValue="unpaid" nzLabel="Unpaid Only"></nz-option>
+        </nz-select>
+      </div>
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+        <nz-input-group [nzSuffix]="suffixIconSearch">
+          <input type="text" nz-input placeholder="Search invoice..." [(ngModel)]="searchText" (ngModelChange)="applyFilter()" />
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+          <span nz-icon nzType="search"></span>
+        </ng-template>
+      </div>
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="4">
+        <button nz-button (click)="clearFilters()" *ngIf="filterStatus !== 'all' || searchText">
+          <span nz-icon nzType="close"></span> Clear
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper">
+    <nz-spin [nzSpinning]="loading">
+      <nz-table #invoiceTable [nzData]="filteredInvoices" [nzPageSize]="10" [nzShowPagination]="true"
+                [nzBordered]="false" [nzSize]="'middle'" [nzNoResult]="noDataTpl">
+        <thead>
+          <tr>
+            <th nzWidth="130px">Invoice #</th>
+            <th>Guest</th>
+            <th nzWidth="100px">Reservation</th>
+            <th nzWidth="140px">Amount</th>
+            <th nzWidth="100px">Status</th>
+            <th nzWidth="120px">Issued Date</th>
+            <th nzWidth="150px">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let invoice of invoiceTable.data">
+            <td>
+              <strong class="invoice-number">{{ invoice.invoiceNumber }}</strong>
+            </td>
+            <td>
+              <div class="guest-info">
+                <span class="guest-name">{{ invoice.guestName || invoice.userName }}</span>
+                <span class="guest-email">{{ invoice.guestEmail }}</span>
+              </div>
+            </td>
+            <td>
+              <a class="reservation-link">#{{ invoice.reservationId }}</a>
+            </td>
+            <td>
+              <div class="amount-info">
+                <strong class="grand-total">{{ invoice.grandTotal | currency:'INR':'symbol':'1.0-0' }}</strong>
+                <span class="balance-due" *ngIf="!invoice.isPaid && invoice.balanceDue">
+                  Due: {{ invoice.balanceDue | currency:'INR':'symbol':'1.0-0' }}
+                </span>
+              </div>
+            </td>
+            <td>
+              <nz-tag [nzColor]="invoice.isPaid ? 'green' : 'red'">
+                <span nz-icon [nzType]="invoice.isPaid ? 'check-circle' : 'clock-circle'"></span>
+                {{ invoice.isPaid ? 'Paid' : 'Unpaid' }}
+              </nz-tag>
+            </td>
+            <td>{{ invoice.issuedAt | date:'dd MMM yyyy' }}</td>
+            <td>
+              <div class="action-buttons">
+                <button nz-button nzType="link" nzSize="small" (click)="viewInvoice(invoice)"
+                        nz-tooltip nzTooltipTitle="View Details">
+                  <span nz-icon nzType="eye"></span>
+                </button>
+                <button nz-button nzType="link" nzSize="small" *ngIf="!invoice.isPaid" (click)="markAsPaid(invoice.id)"
+                        nz-tooltip nzTooltipTitle="Mark as Paid" class="paid-btn">
+                  <span nz-icon nzType="check-circle"></span>
+                </button>
+                <button nz-button nzType="link" nzSize="small" (click)="downloadInvoice(invoice)"
+                        nz-tooltip nzTooltipTitle="Download PDF" class="download-btn">
+                  <span nz-icon nzType="download"></span>
+                </button>
+                <button nz-button nzType="link" nzSize="small" (click)="printInvoice(invoice)"
+                        nz-tooltip nzTooltipTitle="Print Invoice">
+                  <span nz-icon nzType="printer"></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <ng-template #noDataTpl>
+        <nz-empty [nzNotFoundContent]="'No invoices found'"></nz-empty>
+      </ng-template>
+    </nz-spin>
+  </div>
+</div>
+
+<!-- Invoice Detail Modal -->
+<nz-modal [(nzVisible)]="detailModalVisible" nzTitle="Invoice Details"
+          (nzOnCancel)="detailModalVisible = false" [nzFooter]="modalFooter" [nzWidth]="700">
+  <ng-container *nzModalContent>
+    <div *ngIf="selectedInvoice" class="invoice-detail" id="invoicePrint">
+      <!-- Invoice Header -->
+      <div class="invoice-header">
+        <div class="invoice-brand">
+          <h2>HOTEL INVOICE</h2>
+          <p>Tax Invoice / GST Invoice</p>
+        </div>
+        <div class="invoice-meta">
+          <h3>{{ selectedInvoice.invoiceNumber }}</h3>
+          <nz-tag [nzColor]="selectedInvoice.isPaid ? 'green' : 'red'" class="status-tag">
+            {{ selectedInvoice.isPaid ? 'PAID' : 'UNPAID' }}
+          </nz-tag>
+          <p class="issue-date">Issued: {{ selectedInvoice.issuedAt | date:'dd MMM yyyy' }}</p>
+        </div>
+      </div>
+
+      <nz-divider></nz-divider>
+
+      <!-- Guest Info -->
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="12">
+          <div class="info-section">
+            <h4>Bill To:</h4>
+            <p class="guest-name">{{ selectedInvoice.guestName || selectedInvoice.userName }}</p>
+            <p>{{ selectedInvoice.guestEmail }}</p>
+            <p>{{ selectedInvoice.guestPhone }}</p>
+            <p *ngIf="selectedInvoice.guestAddress">{{ selectedInvoice.guestAddress }}</p>
+          </div>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <div class="info-section">
+            <h4>Reservation Details:</h4>
+            <p>Reservation #: {{ selectedInvoice.reservationId }}</p>
+            <p>Room: {{ selectedInvoice.roomName }}</p>
+            <p>Check-In: {{ selectedInvoice.checkInDate }}</p>
+            <p>Check-Out: {{ selectedInvoice.checkOutDate }}</p>
+          </div>
+        </div>
+      </div>
+
+      <nz-divider></nz-divider>
+
+      <!-- Charges Breakdown -->
+      <div class="charges-section">
+        <h4>Charges Breakdown</h4>
+        <div class="charges-breakdown">
+          <div class="charge-item">
+            <span>Room Charges</span>
+            <span>{{ selectedInvoice.roomCharges | currency:'INR' }}</span>
+          </div>
+          <div class="charge-item" *ngIf="selectedInvoice.serviceCharges">
+            <span>Service Charges</span>
+            <span>{{ selectedInvoice.serviceCharges | currency:'INR' }}</span>
+          </div>
+          <div class="charge-item" *ngIf="selectedInvoice.additionalCharges">
+            <span>Additional Charges</span>
+            <span>{{ selectedInvoice.additionalCharges | currency:'INR' }}</span>
+          </div>
+          <div class="charge-item discount" *ngIf="selectedInvoice.discount">
+            <span>Discount</span>
+            <span>-{{ selectedInvoice.discount | currency:'INR' }}</span>
+          </div>
+
+          <nz-divider></nz-divider>
+
+          <div class="charge-item subtotal">
+            <span>Subtotal</span>
+            <span>{{ selectedInvoice.subtotal | currency:'INR' }}</span>
+          </div>
+          <div class="charge-item tax">
+            <span>CGST (9%)</span>
+            <span>{{ selectedInvoice.cgst | currency:'INR' }}</span>
+          </div>
+          <div class="charge-item tax">
+            <span>SGST (9%)</span>
+            <span>{{ selectedInvoice.sgst | currency:'INR' }}</span>
+          </div>
+
+          <nz-divider></nz-divider>
+
+          <div class="charge-item total">
+            <span>Grand Total</span>
+            <span>{{ selectedInvoice.grandTotal | currency:'INR' }}</span>
+          </div>
+          <div class="charge-item paid" *ngIf="selectedInvoice.amountPaid">
+            <span>Amount Paid</span>
+            <span>{{ selectedInvoice.amountPaid | currency:'INR' }}</span>
+          </div>
+          <div class="charge-item due" *ngIf="selectedInvoice.balanceDue && !selectedInvoice.isPaid">
+            <span>Balance Due</span>
+            <span>{{ selectedInvoice.balanceDue | currency:'INR' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- GSTIN Section -->
+      <div class="gstin-section" *ngIf="selectedInvoice.gstin">
+        <nz-divider></nz-divider>
+        <p><strong>GSTIN:</strong> {{ selectedInvoice.gstin }}</p>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #modalFooter>
+    <button nz-button (click)="detailModalVisible = false">Close</button>
+    <button nz-button nzType="default" (click)="downloadInvoice(selectedInvoice)">
+      <span nz-icon nzType="download"></span> Download PDF
+    </button>
+    <button nz-button nzType="primary" (click)="printInvoice(selectedInvoice)">
+      <span nz-icon nzType="printer"></span> Print
+    </button>
+  </ng-template>
+</nz-modal>

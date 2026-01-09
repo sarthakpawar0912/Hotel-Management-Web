@@ -1,137 +1,160 @@
-/* Global Styles */
-body {
-  margin: 0;
-  font-family: "Poppins", sans-serif;
-  background: linear-gradient(to right, #4a148c, #7b1fa2); /* Gradient Background */
-  color: white;
-  min-height: 100vh;
+// Form Header
+.form-header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+
+  h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a2e;
+
+    span[nz-icon] {
+      margin-right: 8px;
+      color: #6a1b9a;
+    }
+  }
+
+  p {
+    margin: 0;
+    color: #8c8c8c;
+    font-size: 14px;
+  }
+}
+
+// Image Upload Container
+.image-upload-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
-/* Ensure the main content pushes the footer down */
-.main-container {
-  flex: 1;
+.upload-placeholder {
+  width: 100%;
+  height: 180px;
+  border: 2px dashed #d9d9d9;
+  border-radius: 8px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px;
-}
-
-/* Footer - Fixed at Bottom */
-.footer {
-  background: #2c0e4a;
-  color: white;
-  text-align: center;
-  padding: 15px;
-  font-size: 14px;
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-}
-
-/* Form Container */
-.room-details-form-container {
-  width: 100%;
-  max-width: 450px;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  background: rgba(255, 255, 255, 0.15); /* Light Transparent Background */
-  backdrop-filter: blur(12px); /* Slightly Stronger Blurry Effect */
-  text-align: center;
-  color: #ffffff;
-}
-
-
-/* Form Title */
-/* Form Title - Bold Black */
-.form-title {
-  font-size: 24px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 20px;
-  color: black; /* Changed to Black */
-}
-
-
-
-/* Input Fields */
-nz-form-item {
-  margin-bottom: 18px;
-}
-
-
-input[nz-input] {
-  height: 45px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  padding: 10px;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.3); /* Slightly Opaque Background */
-  color: black; /* Ensuring Text is Visible */
-  transition: all 0.3s ease-in-out;
-}
-
-
-input[nz-input]::placeholder {
-  color: rgba(0, 0, 0, 0.7); /* Darker Placeholder for Visibility */
-  font-weight: 500;
-}
-
-input[nz-input]:focus {
-  border: 2px solid white;
-  outline: none;
-  background: white;
-  color: black;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
-}
-
-/* Submit Button */
-button[nz-button] {
-  width: 100%;
-  height: 50px;
-  font-size: 16px;
-  font-weight: bold;
-  background: #ff9800;
-  border: none;
-  color: white;
-  border-radius: 8px;
-  transition: all 0.3s ease-in-out;
   cursor: pointer;
-}
+  background: #fafafa;
+  transition: all 0.3s ease;
 
-button[nz-button]:hover {
-  background: #ffb74d;
-  box-shadow: 0 4px 10px rgba(255, 152, 0, 0.4);
-}
-
-button[nz-button]:disabled {
-  background: #b39ddb;
-  cursor: not-allowed;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-  .room-details-form-container {
-    max-width: 100%;
-    padding: 20px;
+  span[nz-icon] {
+    font-size: 48px;
+    color: #6a1b9a;
+    margin-bottom: 12px;
   }
 
-  .form-title {
-    font-size: 20px;
+  .upload-text {
+    font-size: 14px;
+    color: #1a1a2e;
+    font-weight: 500;
   }
 
-  button[nz-button] {
-    height: 45px;
-    font-size: 15px;
-  }
-
-  .footer {
+  .upload-hint {
     font-size: 12px;
-    padding: 10px;
+    color: #8c8c8c;
+    margin-top: 4px;
+  }
+
+  &:hover {
+    border-color: #6a1b9a;
+    background: #f5f0ff;
+  }
+}
+
+.image-preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.image-actions {
+  display: flex;
+  gap: 8px;
+}
+
+// Form Actions
+.form-actions {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+
+  ::ng-deep .ant-form-item-control-input-content {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+// Form Input Styling
+::ng-deep {
+  .ant-form-item-label > label {
+    font-weight: 500;
+    color: #1a1a2e;
+  }
+
+  .ant-input,
+  .ant-select-selector,
+  .ant-input-number {
+    border-radius: 6px !important;
+
+    &:hover, &:focus {
+      border-color: #6a1b9a !important;
+    }
+  }
+
+  .ant-input:focus,
+  .ant-select-focused .ant-select-selector,
+  .ant-input-number-focused {
+    box-shadow: 0 0 0 2px rgba(106, 27, 154, 0.1) !important;
+  }
+
+  .ant-input-number {
+    width: 100%;
+  }
+
+  .ant-divider {
+    margin: 16px 0;
+  }
+}
+
+// Primary Button Override
+button[nz-button][nztype="primary"] {
+  min-width: 140px;
+}
+
+// Responsive
+@media (max-width: 576px) {
+  .form-header {
+    h2 {
+      font-size: 20px;
+    }
+  }
+
+  .form-actions {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+      margin-right: 0 !important;
+      margin-bottom: 8px;
+    }
   }
 }

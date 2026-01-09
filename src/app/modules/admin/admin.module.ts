@@ -20,8 +20,24 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { DemoNgZorroAntdModule } from '../../DemoNgZorroAntdModule';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzRateModule } from 'ng-zorro-antd/rate';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { UpdateRoomComponent } from './components/update-room/update-room.component';
 import { ReservationsComponent } from './components/reservations/reservations.component';
+import { GuestsComponent } from './components/guests/guests.component';
+import { CheckInOutComponent } from './components/check-in-out/check-in-out.component';
+import { ReportsComponent } from './components/reports/reports.component';
+import { ReviewsComponent } from './components/reviews/reviews.component';
+import { PromotionsComponent } from './components/promotions/promotions.component';
+import { InvoicesComponent } from './components/invoices/invoices.component';
+import { PaymentsComponent } from './components/payments/payments.component';
 
 
 @NgModule({
@@ -30,31 +46,46 @@ import { ReservationsComponent } from './components/reservations/reservations.co
     DashboardComponent,
     PostRoomComponent,
     UpdateRoomComponent,
-    ReservationsComponent
+    ReservationsComponent,
+    GuestsComponent,
+    CheckInOutComponent,
+    ReportsComponent,
+    ReviewsComponent,
+    PromotionsComponent,
+    InvoicesComponent,
+    PaymentsComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     NzModalModule,
-    NzFormModule,       
-    NzInputModule,      
-    NzButtonModule,     
+    NzFormModule,
+    NzInputModule,
+    NzButtonModule,
     NzMessageModule,
-    NzTableModule,      
-    NzTagModule,         
+    NzTableModule,
+    NzTagModule,
     NzPaginationModule,
-    AdminRoutingModule, 
-     DemoNgZorroAntdModule,
+    AdminRoutingModule,
+    DemoNgZorroAntdModule,
     NzCardModule,
     NzSkeletonModule,
     NzAvatarModule,
     NzIconModule,
-    NzPaginationModule,
-    NzSpinModule
+    NzSpinModule,
+    NzSelectModule,
+    NzDatePickerModule,
+    NzInputNumberModule,
+    NzDividerModule,
+    NzStatisticModule,
+    NzTabsModule,
+    NzEmptyModule,
+    NzRateModule,
+    NzToolTipModule
   ],
   providers: [
-    NzModalService // ✅ Provide the service here
+    NzModalService
   ]
 })
 export class AdminModule { }

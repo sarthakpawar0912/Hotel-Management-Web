@@ -12,7 +12,8 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { AuthInterceptor } from './auth/services/auth/auth.interceptor';
 import { DemoNgZorroAntdModule } from './DemoNgZorroAntdModule';
 import { ɵBrowserAnimationBuilder } from '@angular/animations';
 import { RegisterComponent } from './auth/components/register/register.component';
@@ -25,6 +26,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 registerLocaleData(en);
 
@@ -53,13 +55,15 @@ registerLocaleData(en);
     NzButtonModule,
     NzIconModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    NzBadgeModule
   ],
 
   providers: [
     provideNzI18n(en_US),
     provideAnimationsAsync(),
-    provideHttpClient()
+    provideHttpClient(withInterceptorsFromDi()),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
 
   bootstrap: [AppComponent]

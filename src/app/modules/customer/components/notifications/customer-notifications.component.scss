@@ -1,0 +1,357 @@
+/* Page Header */
+.page-header {
+  background: linear-gradient(135deg, #6a1b9a, #ab47bc);
+  color: white;
+  padding: 32px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  .header-content {
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      span[nz-icon] {
+        font-size: 32px;
+      }
+    }
+
+    p {
+      margin: 8px 0 0;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+  }
+
+  .header-actions {
+    .notification-badge {
+      ::ng-deep .ant-badge-count {
+        background: #fff;
+        color: #6a1b9a;
+        font-weight: 600;
+      }
+    }
+
+    button {
+      border-color: rgba(255, 255, 255, 0.5);
+      color: white;
+
+      &:hover {
+        border-color: white;
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+/* Container */
+.notifications-container {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Stats Bar */
+.stats-bar {
+  display: flex;
+  gap: 24px;
+  padding: 16px 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 24px;
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 16px;
+
+    .value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .label {
+      font-size: 13px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    &.unread {
+      .value {
+        color: #6a1b9a;
+      }
+    }
+  }
+}
+
+/* Empty State */
+.empty-state {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+
+  .empty-icon {
+    font-size: 80px;
+    color: #d9d9d9;
+  }
+
+  .empty-text {
+    text-align: center;
+
+    h3 {
+      font-size: 20px;
+      color: #333;
+      margin: 0 0 8px;
+    }
+
+    p {
+      color: #888;
+      margin: 0;
+    }
+  }
+}
+
+/* Notifications List */
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Notification Card */
+.notification-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(106, 27, 154, 0.12);
+    transform: translateY(-2px);
+  }
+
+  &.unread {
+    background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+    border-left-color: #6a1b9a;
+
+    .notification-title {
+      font-weight: 700;
+    }
+  }
+
+  .notification-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    span[nz-icon] {
+      font-size: 24px;
+      color: white;
+    }
+
+    /* Icon background colors based on notification type */
+    &.green {
+      background: linear-gradient(135deg, #52c41a, #73d13d);
+    }
+
+    &.red {
+      background: linear-gradient(135deg, #ff4d4f, #ff7875);
+    }
+
+    &.blue {
+      background: linear-gradient(135deg, #1890ff, #40a9ff);
+    }
+
+    &.orange {
+      background: linear-gradient(135deg, #fa8c16, #ffa940);
+    }
+
+    &.gold {
+      background: linear-gradient(135deg, #faad14, #ffc53d);
+    }
+
+    &.purple {
+      background: linear-gradient(135deg, #722ed1, #9254de);
+    }
+  }
+
+  .notification-content {
+    flex: 1;
+    min-width: 0;
+
+    .notification-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+
+      .notification-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .new-badge {
+        font-size: 11px;
+        padding: 0 6px;
+        border-radius: 4px;
+      }
+    }
+
+    .notification-message {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+      margin: 0 0 12px;
+    }
+
+    .notification-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+
+      .time {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: #888;
+
+        span[nz-icon] {
+          font-size: 14px;
+        }
+      }
+
+      .type-tag {
+        font-size: 11px;
+      }
+    }
+  }
+
+  .notification-action {
+    flex-shrink: 0;
+
+    button {
+      color: #6a1b9a;
+
+      &:hover {
+        background: rgba(106, 27, 154, 0.08);
+      }
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-header {
+    padding: 24px 20px;
+    flex-direction: column;
+    text-align: center;
+
+    .header-content {
+      h1 {
+        font-size: 24px;
+        justify-content: center;
+      }
+    }
+
+    .header-actions {
+      width: 100%;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+
+  .notifications-container {
+    padding: 16px;
+  }
+
+  .stats-bar {
+    justify-content: center;
+    padding: 12px 16px;
+
+    .stat {
+      padding: 8px 12px;
+
+      .value {
+        font-size: 24px;
+      }
+    }
+  }
+
+  .notification-card {
+    padding: 16px;
+
+    .notification-icon {
+      width: 40px;
+      height: 40px;
+
+      span[nz-icon] {
+        font-size: 20px;
+      }
+    }
+
+    .notification-content {
+      .notification-header {
+        .notification-title {
+          font-size: 15px;
+        }
+      }
+
+      .notification-message {
+        font-size: 13px;
+      }
+
+      .notification-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .notification-card {
+    flex-direction: column;
+
+    .notification-icon {
+      width: 48px;
+      height: 48px;
+    }
+
+    .notification-action {
+      width: 100%;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

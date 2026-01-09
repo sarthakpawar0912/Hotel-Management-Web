@@ -1,0 +1,227 @@
+// =============================================
+// LAYOUT VARIABLES
+// =============================================
+$sidebar-width: 240px;
+$sidebar-bg: linear-gradient(180deg, #4a148c, #7b1fa2);
+$content-bg: #f5f6fa;
+$footer-height: 56px;
+
+// =============================================
+// CUSTOMER LAYOUT - Root Container
+// =============================================
+.customer-layout {
+  display: flex;
+  min-height: 100vh;
+  background: $content-bg;
+}
+
+// =============================================
+// SIDEBAR - Fixed Left Navigation (NO COLLAPSE)
+// =============================================
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: $sidebar-width;
+  height: 100vh;
+  background: $sidebar-bg;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  // Sidebar scrollbar
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+  }
+}
+
+// Sidebar Logo
+.sidebar-logo {
+  height: 64px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-shrink: 0;
+
+  span[nz-icon] {
+    font-size: 24px;
+    color: #ffeb3b;
+  }
+
+  .logo-text {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+}
+
+// Sidebar Navigation
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 8px;
+
+  ul[nz-menu] {
+    background: transparent !important;
+    border-right: none !important;
+
+    ::ng-deep {
+      .ant-menu-item {
+        color: #fff !important;
+        margin: 4px 0;
+        border-radius: 8px;
+        height: auto !important;
+        line-height: 1.5 !important;
+        padding: 12px 16px !important;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        span[nz-icon] {
+          color: #ffeb3b !important;
+          font-size: 18px;
+          margin-right: 0;
+        }
+      }
+
+      .ant-menu-item-selected {
+        background: rgba(255, 255, 255, 0.2) !important;
+      }
+    }
+  }
+}
+
+// Logout Item
+.logout-item {
+  margin-top: 16px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding-top: 16px !important;
+
+  &:hover {
+    background: rgba(255, 77, 79, 0.3) !important;
+  }
+
+  ::ng-deep span[nz-icon] {
+    color: #ff6b6b !important;
+  }
+}
+
+// Notification Badge
+.notification-badge {
+  ::ng-deep .ant-badge-count {
+    background: #ff4d4f;
+    box-shadow: 0 0 0 2px #7b1fa2;
+  }
+}
+
+// =============================================
+// MAIN CONTENT - Content Area Right of Sidebar
+// =============================================
+.main-content {
+  margin-left: $sidebar-width;
+  width: calc(100% - #{$sidebar-width});
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: $content-bg;
+}
+
+// Content Wrapper - Where router-outlet renders
+.content-wrapper {
+  flex: 1;
+  width: 100%;
+  min-height: calc(100vh - #{$footer-height});
+}
+
+// =============================================
+// FOOTER
+// =============================================
+.app-footer {
+  background: linear-gradient(135deg, #4a148c, #6a1b9a);
+  color: #fff;
+  text-align: center;
+  padding: 16px 24px;
+  height: $footer-height;
+  flex-shrink: 0;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.9;
+  }
+}
+
+// =============================================
+// RESPONSIVE - Mobile & Tablet
+// =============================================
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .main-content {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+  }
+
+  .sidebar-logo {
+    .logo-text {
+      font-size: 14px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    width: 70px;
+
+    .sidebar-logo {
+      .logo-text {
+        display: none;
+      }
+    }
+
+    .sidebar-nav {
+      ul[nz-menu] {
+        ::ng-deep .ant-menu-item {
+          justify-content: center;
+          padding: 12px !important;
+
+          span:not([nz-icon]):not(.ant-badge) {
+            display: none;
+          }
+
+          span[nz-icon] {
+            margin: 0;
+            font-size: 20px;
+          }
+        }
+      }
+    }
+  }
+
+  .main-content {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
+}

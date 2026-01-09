@@ -1,105 +1,151 @@
-/* Centered Form Styling */
-.center-form {
-  max-width: 90%;
-  margin: 40px auto;
-  padding: 20px;
-  background: linear-gradient(135deg, #6a0572, #a4508b);
-  border-radius: 12px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.reservations-container {
+  padding: 0;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #6a1b9a, #ab47bc);
+    color: #fff;
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 8px;
+
+      nz-tag {
+        font-size: 14px;
+        padding: 4px 12px;
+        border-radius: 12px;
+      }
+    }
+  }
+
+  .filters-section {
+    padding: 20px 24px;
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+
+    nz-select, nz-range-picker {
+      width: 100%;
+    }
+  }
+
+  .table-wrapper {
+    padding: 24px;
+    background: #fff;
+    min-height: 400px;
+
+    nz-table {
+      ::ng-deep .ant-table {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+
+      ::ng-deep .ant-table-thead > tr > th {
+        background: #fafafa;
+        font-weight: 600;
+        color: #1a1a2e;
+        border-bottom: 2px solid #f0f0f0;
+        padding: 14px 16px;
+      }
+
+      ::ng-deep .ant-table-tbody > tr > td {
+        padding: 14px 16px;
+        vertical-align: middle;
+      }
+
+      ::ng-deep .ant-table-tbody > tr:hover > td {
+        background: #f5f0ff !important;
+      }
+    }
+  }
+
+  .guest-info {
+    .guest-name {
+      font-weight: 500;
+      color: #1a1a2e;
+    }
+  }
+
+  .room-info {
+    display: flex;
+    flex-direction: column;
+
+    .room-name {
+      font-weight: 500;
+      color: #1a1a2e;
+    }
+
+    .room-type {
+      font-size: 12px;
+      color: #8c8c8c;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    button {
+      &[nzType="primary"] {
+        background: linear-gradient(135deg, #52c41a, #73d13d);
+        border: none;
+
+        &:hover {
+          background: linear-gradient(135deg, #389e0d, #52c41a);
+        }
+      }
+    }
+  }
+
+  .no-action {
+    color: #bfbfbf;
+    font-size: 18px;
+  }
+
+  .pagination-wrapper {
+    padding: 20px 24px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  nz-tag {
+    font-weight: 500;
+    border-radius: 4px;
+    padding: 2px 8px;
+
+    span[nz-icon] {
+      margin-right: 4px;
+    }
+  }
 }
 
-/* Page Title */
-.page-title {
-  text-align: center;
-  color: #ffccff;
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
+// Responsive
+@media (max-width: 768px) {
+  .reservations-container {
+    .page-header {
+      flex-direction: column;
+      gap: 12px;
+      text-align: center;
+    }
 
-/* Table Container (Ensures Consistent Height) */
-.table-container {
-  width: 100%;
-  min-height: 350px; /* Fixed Height */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
+    .table-wrapper {
+      padding: 16px;
 
-/* Table Styling */
-nz-table {
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  width: 100%;
-}
-
-th, td {
-  text-align: center;
-  padding: 10px;
-}
-
-td {
-  font-size: 14px;
-  color: #333;
-}
-
-/* Empty Row Styling to Maintain Layout */
-.empty-row {
-  height: 50px;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* Status Tags Styling */
-nz-tag {
-  font-weight: bold;
-}
-
-/* Status Tag Colors */
-nz-tag[nzColor="processing"] {
-  background: #ffcc00 !important;
-  color: black !important;
-}
-
-nz-tag[nzColor="success"] {
-  background: #00cc66 !important;
-  color: white !important;
-}
-
-nz-tag[nzColor="error"] {
-  background: #ff3333 !important;
-  color: white !important;
-}
-
-/* Icons for Action */
-.icon {
-  cursor: pointer;
-  font-size: 18px;
-  margin: 0 5px;
-}
-
-/* Pagination Styling */
-.pagination {
-  text-align: center;
-  margin-top: 20px;
-}
-
-
-nz-pagination {
-  display: inline-block;
-}
-
-
-nz-pagination .ant-pagination-item-active {
-  background-color: #ffccff !important;
-  border-color: #ff66ff !important;
-}
-
-
-nz-pagination .ant-pagination-item a {
-  color: white !important;
+      ::ng-deep .ant-table {
+        overflow-x: auto;
+      }
+    }
+  }
 }

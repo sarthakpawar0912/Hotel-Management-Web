@@ -1,0 +1,167 @@
+.check-in-out-container {
+  padding: 0;
+
+  h2 {
+    margin: 0;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #6a1b9a, #ab47bc);
+    color: #fff;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .stats-cards {
+    padding: 24px;
+    background: #fff;
+    margin-bottom: 0;
+
+    nz-card {
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      height: 100%;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      }
+
+      ::ng-deep .ant-card-body {
+        padding: 20px;
+      }
+
+      ::ng-deep .ant-statistic-title {
+        font-size: 13px;
+        color: #8c8c8c;
+        margin-bottom: 8px;
+      }
+
+      ::ng-deep .ant-statistic-content {
+        font-size: 28px;
+        font-weight: 700;
+      }
+
+      ::ng-deep .ant-statistic-content-prefix {
+        font-size: 20px;
+        margin-right: 8px;
+        color: #6a1b9a;
+      }
+    }
+  }
+
+  nz-tabset {
+    padding: 0 24px 24px;
+
+    ::ng-deep .ant-tabs-nav {
+      background: #fafafa;
+      padding: 0 16px;
+      margin-bottom: 0;
+      border-radius: 8px 8px 0 0;
+    }
+
+    ::ng-deep .ant-tabs-tab {
+      padding: 16px 24px;
+      font-weight: 500;
+      font-size: 14px;
+
+      &.ant-tabs-tab-active {
+        .ant-tabs-tab-btn {
+          color: #6a1b9a;
+          font-weight: 600;
+        }
+      }
+    }
+
+    ::ng-deep .ant-tabs-ink-bar {
+      background: #6a1b9a;
+      height: 3px;
+    }
+
+    ::ng-deep .ant-tabs-content-holder {
+      background: #fff;
+      border-radius: 0 0 8px 8px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  nz-table {
+    ::ng-deep .ant-table {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    ::ng-deep .ant-table-thead > tr > th {
+      background: #fafafa;
+      font-weight: 600;
+      color: #1a1a2e;
+      border-bottom: 2px solid #f0f0f0;
+      padding: 16px;
+    }
+
+    ::ng-deep .ant-table-tbody > tr > td {
+      padding: 16px;
+      vertical-align: middle;
+    }
+
+    ::ng-deep .ant-table-tbody > tr:hover > td {
+      background: #f5f0ff !important;
+    }
+
+    ::ng-deep .ant-table-tbody > tr:nth-child(even) {
+      background: #fafafa;
+    }
+  }
+
+  nz-empty {
+    padding: 48px;
+    background: #fafafa;
+    border-radius: 8px;
+    margin-top: 16px;
+  }
+
+  // Action buttons
+  button[nz-button] {
+    border-radius: 6px;
+    font-weight: 500;
+
+    &[nzType="primary"] {
+      background: linear-gradient(135deg, #6a1b9a, #8e24aa);
+      border: none;
+
+      &:hover {
+        background: linear-gradient(135deg, #4a148c, #6a1b9a);
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 992px) {
+  .check-in-out-container {
+    .stats-cards {
+      [nz-col] {
+        margin-bottom: 16px;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .check-in-out-container {
+    nz-table {
+      ::ng-deep .ant-table {
+        overflow-x: auto;
+      }
+    }
+
+    nz-tabset {
+      padding: 0 16px 16px;
+
+      ::ng-deep .ant-tabs-tab {
+        padding: 12px 16px;
+        font-size: 13px;
+      }
+    }
+  }
+}

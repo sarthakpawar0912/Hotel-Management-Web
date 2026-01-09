@@ -1,0 +1,111 @@
+<div class="reviews-container">
+  <h2>Reviews Management</h2>
+
+  <div class="stats-cards" nz-row [nzGutter]="16">
+    <div nz-col [nzSpan]="6">
+      <nz-card>
+        <nz-statistic [nzValue]="statistics.totalReviews || 0" [nzTitle]="'Total Reviews'"></nz-statistic>
+      </nz-card>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <nz-card>
+        <nz-statistic [nzValue]="statistics.pendingReviews || 0" [nzTitle]="'Pending Approval'"
+                      [nzValueStyle]="{ color: '#faad14' }"></nz-statistic>
+      </nz-card>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <nz-card>
+        <nz-statistic [nzValue]="(statistics.averageRating || 0).toFixed(1)" [nzTitle]="'Average Rating'"
+                      [nzSuffix]="'/5'"></nz-statistic>
+      </nz-card>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <nz-card>
+        <nz-statistic [nzValue]="statistics.respondedReviews || 0" [nzTitle]="'Responded'"
+                      [nzValueStyle]="{ color: '#52c41a' }"></nz-statistic>
+      </nz-card>
+    </div>
+  </div>
+
+  <div class="filters">
+    <nz-select [(ngModel)]="filterStatus" style="width: 200px;" (ngModelChange)="applyFilter()">
+      <nz-option nzValue="all" nzLabel="All Reviews"></nz-option>
+      <nz-option nzValue="pending" nzLabel="Pending Approval"></nz-option>
+      <nz-option nzValue="approved" nzLabel="Approved"></nz-option>
+    </nz-select>
+  </div>
+
+  <div class="reviews-list">
+    <nz-card *ngFor="let review of filteredReviews" class="review-card">
+      <div class="review-header">
+        <div class="user-info">
+          <nz-avatar nzIcon="user"></nz-avatar>
+          <div class="user-details">
+            <span class="user-name">{{ review.isAnonymous ? 'Anonymous' : review.userName }}</span>
+            <span class="room-name">{{ review.roomName }}</span>
+          </div>
+        </div>
+        <div class="review-status">
+          <nz-tag *ngIf="review.isVerifiedStay" nzColor="green">Verified Stay</nz-tag>
+          <nz-tag [nzColor]="review.isApproved ? 'green' : 'orange'">
+            {{ review.isApproved ? 'Approved' : 'Pending' }}
+          </nz-tag>
+        </div>
+      </div>
+
+      <div class="review-rating">
+        <nz-rate [ngModel]="review.overallRating" nzDisabled></nz-rate>
+        <span class="rating-text">({{ review.overallRating }}/5)</span>
+      </div>
+
+      <div class="review-content" *ngIf="review.title">
+        <h4>{{ review.title }}</h4>
+      </div>
+      <p class="review-comment">{{ review.comment }}</p>
+
+      <div class="review-pros-cons" *ngIf="review.pros || review.cons">
+        <div *ngIf="review.pros" class="pros">
+          <span nz-icon nzType="like" nzTheme="outline"></span> {{ review.pros }}
+        </div>
+        <div *ngIf="review.cons" class="cons">
+          <span nz-icon nzType="dislike" nzTheme="outline"></span> {{ review.cons }}
+        </div>
+      </div>
+
+      <div class="admin-response" *ngIf="review.adminResponse">
+        <strong>Admin Response:</strong>
+        <p>{{ review.adminResponse }}</p>
+      </div>
+
+      <div class="review-actions">
+        <button nz-button nzType="primary" *ngIf="!review.isApproved" (click)="approveReview(review.id)">
+          <span nz-icon nzType="check"></span> Approve
+        </button>
+        <button nz-button nzType="default" (click)="showResponseModal(review)">
+          <span nz-icon nzType="message"></span> Respond
+        </button>
+        <button nz-button nzType="default" nzDanger (click)="rejectReview(review.id)">
+          <span nz-icon nzType="delete"></span> Reject
+        </button>
+      </div>
+    </nz-card>
+  </div>
+
+  <nz-empty *ngIf="filteredReviews.length === 0 && !loading" nzNotFoundContent="No reviews found"></nz-empty>
+</div>
+
+<nz-modal [(nzVisible)]="responseModalVisible" nzTitle="Respond to Review"
+          (nzOnCancel)="responseModalVisible = false" (nzOnOk)="submitResponse()">
+  <ng-container *nzModalContent>
+    <div *ngIf="selectedReview">
+      <p><strong>Review:</strong> {{ selectedReview.comment }}</p>
+      <nz-form-item>
+        <nz-form-label>Your Response</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input [(ngModel)]="adminResponse" placeholder="Enter your response..."
+                    [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </ng-container>
+</nz-modal>

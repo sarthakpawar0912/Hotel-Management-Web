@@ -1,87 +1,244 @@
-<div class="center-form">
-    <button
-      nz-button
-      nzType="primary"
-      class="post-room-btn"
-      routerLink="/admin/room"
-    > Post Room
-    </button>
+<!-- Dashboard Header -->
+<div class="dashboard-header">
+  <h2>Admin Dashboard</h2>
+  <button nz-button nzType="primary" routerLink="/admin/room">
+    <span nz-icon nzType="plus"></span> Add New Room
+  </button>
+</div>
+
+<!-- Dashboard Stats Cards -->
+<div class="stats-section">
+  <nz-spin [nzSpinning]="statsLoading">
+    <div nz-row [nzGutter]="[16, 16]">
+      <!-- Total Rooms -->
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="8" [nzLg]="6" [nzXl]="4">
+        <nz-card class="stat-card">
+          <div class="stat-icon rooms">
+            <span nz-icon nzType="home" nzTheme="outline"></span>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value">{{ dashboardStats.totalRooms }}</div>
+            <div class="stat-label">Total Rooms</div>
+          </div>
+        </nz-card>
+      </div>
+
+      <!-- Available Rooms -->
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="8" [nzLg]="6" [nzXl]="4">
+        <nz-card class="stat-card">
+          <div class="stat-icon available">
+            <span nz-icon nzType="check-circle" nzTheme="outline"></span>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value success">{{ dashboardStats.availableRooms }}</div>
+            <div class="stat-label">Available</div>
+          </div>
+        </nz-card>
+      </div>
+
+      <!-- Occupied Rooms -->
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="8" [nzLg]="6" [nzXl]="4">
+        <nz-card class="stat-card">
+          <div class="stat-icon occupied">
+            <span nz-icon nzType="user" nzTheme="outline"></span>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value warning">{{ dashboardStats.occupiedRooms }}</div>
+            <div class="stat-label">Occupied</div>
+          </div>
+        </nz-card>
+      </div>
+
+      <!-- Today's Check-Ins -->
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="8" [nzLg]="6" [nzXl]="4">
+        <nz-card class="stat-card">
+          <div class="stat-icon checkin">
+            <span nz-icon nzType="login" nzTheme="outline"></span>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value info">{{ dashboardStats.todayCheckIns }}</div>
+            <div class="stat-label">Today's Check-Ins</div>
+          </div>
+        </nz-card>
+      </div>
+
+      <!-- Today's Check-Outs -->
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="8" [nzLg]="6" [nzXl]="4">
+        <nz-card class="stat-card">
+          <div class="stat-icon checkout">
+            <span nz-icon nzType="logout" nzTheme="outline"></span>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value">{{ dashboardStats.todayCheckOuts }}</div>
+            <div class="stat-label">Today's Check-Outs</div>
+          </div>
+        </nz-card>
+      </div>
+
+      <!-- Occupancy Rate -->
+      <div nz-col [nzXs]="12" [nzSm]="12" [nzMd]="8" [nzLg]="6" [nzXl]="4">
+        <nz-card class="stat-card">
+          <div class="stat-icon rate">
+            <span nz-icon nzType="pie-chart" nzTheme="outline"></span>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value" [class.success]="dashboardStats.occupancyRate >= 70"
+                 [class.warning]="dashboardStats.occupancyRate < 70 && dashboardStats.occupancyRate >= 40"
+                 [class.danger]="dashboardStats.occupancyRate < 40">
+              {{ dashboardStats.occupancyRate }}%
+            </div>
+            <div class="stat-label">Occupancy Rate</div>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+
+    <!-- Revenue Cards Row -->
+    <div nz-row [nzGutter]="[16, 16]" style="margin-top: 16px;">
+      <!-- Monthly Revenue -->
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+        <nz-card class="stat-card revenue-card">
+          <div class="stat-icon revenue">
+            <span nz-icon nzType="dollar" nzTheme="outline"></span>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value revenue-value">₹{{ dashboardStats.monthlyRevenue | number }}</div>
+            <div class="stat-label">This Month's Revenue</div>
+          </div>
+        </nz-card>
+      </div>
+
+      <!-- Pending Bookings -->
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+        <nz-card class="stat-card">
+          <div class="stat-icon pending">
+            <span nz-icon nzType="clock-circle" nzTheme="outline"></span>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value warning">{{ dashboardStats.pendingBookings }}</div>
+            <div class="stat-label">Pending Bookings</div>
+          </div>
+        </nz-card>
+      </div>
+
+      <!-- Total Revenue -->
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+        <nz-card class="stat-card revenue-card">
+          <div class="stat-icon total-revenue">
+            <span nz-icon nzType="fund" nzTheme="outline"></span>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value revenue-value">₹{{ dashboardStats.totalRevenue | number }}</div>
+            <div class="stat-label">Total Revenue</div>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+  </nz-spin>
+</div>
+
+<!-- Room Management Section Header -->
+<div class="section-header">
+  <h3><span nz-icon nzType="appstore"></span> Room Management</h3>
+</div>
+
+<!-- Search and Filter Section -->
+<div class="search-filter-section">
+  <div nz-row [nzGutter]="16" nzAlign="middle">
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+      <nz-input-group [nzPrefix]="prefixSearch">
+        <input nz-input placeholder="Search by name..." [(ngModel)]="searchName" (keyup.enter)="onSearch()" />
+      </nz-input-group>
+      <ng-template #prefixSearch>
+        <span nz-icon nzType="search"></span>
+      </ng-template>
+    </div>
+
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="4">
+      <nz-select [(ngModel)]="searchType" nzPlaceHolder="Room Type" nzAllowClear style="width: 100%;">
+        <nz-option *ngFor="let type of roomTypes" [nzValue]="type" [nzLabel]="type"></nz-option>
+      </nz-select>
+    </div>
+
+    <div nz-col [nzXs]="12" [nzSm]="6" [nzMd]="3">
+      <nz-input-number [(ngModel)]="minPrice" [nzMin]="0" nzPlaceHolder="Min Price" style="width: 100%;"></nz-input-number>
+    </div>
+
+    <div nz-col [nzXs]="12" [nzSm]="6" [nzMd]="3">
+      <nz-input-number [(ngModel)]="maxPrice" [nzMin]="0" nzPlaceHolder="Max Price" style="width: 100%;"></nz-input-number>
+    </div>
+
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="4">
+      <nz-select [(ngModel)]="filterAvailable" nzPlaceHolder="Availability" nzAllowClear style="width: 100%;">
+        <nz-option [nzValue]="true" nzLabel="Available"></nz-option>
+        <nz-option [nzValue]="false" nzLabel="Not Available"></nz-option>
+      </nz-select>
+    </div>
+
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="4">
+      <button nz-button nzType="primary" (click)="onSearch()" style="margin-right: 8px;">
+        <span nz-icon nzType="search"></span> Search
+      </button>
+      <button nz-button (click)="clearFilters()" *ngIf="isSearchMode">
+        <span nz-icon nzType="close"></span> Clear
+      </button>
+    </div>
   </div>
-  
-  
-  <!-- Loader while fetching rooms -->
-  <nz-spin *ngIf="loading"></nz-spin>
-  
+</div>
+
+<!-- Loader -->
+<nz-spin [nzSpinning]="loading">
   <!-- No Rooms Message -->
   <div *ngIf="!loading && rooms.length === 0" class="no-rooms">
-    <p>No rooms available. Please add a new room.</p>
+    <nz-empty [nzNotFoundContent]="contentTpl">
+      <ng-template #contentTpl>
+        <span>{{ isSearchMode ? 'No rooms found matching your criteria' : 'No rooms available. Add a new room to get started.' }}</span>
+      </ng-template>
+    </nz-empty>
   </div>
-  
-  
+
+  <!-- Room Cards Grid -->
   <div class="room-container" *ngIf="rooms.length > 0">
     <div class="room-row" *ngFor="let room of rooms">
-      <nz-card
-        style="width: 300px; margin: 16px"
-        [nzActions]="[actionEdit, actionDelete]"
-      >
-        <nz-skeleton [nzActive]="true" [nzLoading]="loading" [nzAvatar]="true">
-          <nz-card-meta
-            [nzAvatar]="avatarTemplate"
-            nzTitle="{{ room.name }}"
-            nzDescription="Type: {{ room.type }}"
-          >
-          </nz-card-meta>
+      <nz-card style="width: 320px; margin: 16px" [nzCover]="coverTemplate" [nzActions]="[actionEdit, actionDelete]">
+        <nz-card-meta [nzTitle]="room.name" [nzDescription]="descriptionTpl"></nz-card-meta>
 
-          <nz-card-meta
-            style="margin-left: 49px"
-            nzDescription="Price: ₹{{ room.price }}"
-          >
-  
-          </nz-card-meta>
-        </nz-skeleton>
+        <ng-template #descriptionTpl>
+          <div class="room-details">
+            <p><span nz-icon nzType="home"></span> {{ room.type }}</p>
+            <p><span nz-icon nzType="dollar"></span> ₹{{ room.price }}/night</p>
+            <p *ngIf="room.roomNumber"><span nz-icon nzType="number"></span> Room: {{ room.roomNumber }}</p>
+            <p *ngIf="room.capacity"><span nz-icon nzType="team"></span> {{ room.capacity }} Guests</p>
+            <nz-tag [nzColor]="room.available ? 'green' : 'red'">
+              {{ room.available ? 'Available' : 'Occupied' }}
+            </nz-tag>
+          </div>
+        </ng-template>
       </nz-card>
 
-      <!-- Avatar Template -->
-      <ng-template #avatarTemplate>
-        <nz-avatar
-          nzSrc="https://images.unsplash.com/photo-1629140727571-9b5c6f6267b4"
-        ></nz-avatar>
+      <!-- Cover Image Template -->
+      <ng-template #coverTemplate>
+        <img [src]="getRoomImage(room)" alt="{{ room.name }}" class="room-cover-image" />
       </ng-template>
-  
+
       <!-- Edit Action -->
       <ng-template #actionEdit>
-        <span
-          nz-icon
-          nzType="edit"
-          [nzTheme]="'twotone'"
-          class="icon"
-          routerLink="/admin/room/{{ room.id }}/edit"
-        ></span>
+        <span nz-icon nzType="edit" [nzTheme]="'twotone'" class="icon" routerLink="/admin/room/{{ room.id }}/edit"
+          nz-tooltip="Edit Room"></span>
       </ng-template>
 
       <!-- Delete Action -->
       <ng-template #actionDelete>
-        <span
-        nz-icon
-        nzType="delete"
-        [nzTheme]="'twotone'"
-        class="icon"
-        [nzTwotoneColor]="'#FF0000'"
-        (click)="showConfirm(room.id)" 
-      ></span>
-      
+        <span nz-icon nzType="delete" [nzTheme]="'twotone'" class="icon" [nzTwotoneColor]="'#FF0000'"
+          (click)="showConfirm(room.id)" nz-tooltip="Delete Room"></span>
       </ng-template>
     </div>
-   
-    <!-- Pagination -->
-    <div class="pagination">
-      <nz-pagination
-      [nzPageIndex]="currentpage"
-      [nzTotal]="total"
-      [nzPageSize]="10"
-      (nzPageIndexChange)="pageIndexChange($event)" 
-    ></nz-pagination>
-    
-    </div>
   </div>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="rooms.length > 0">
+    <nz-pagination [nzPageIndex]="currentpage" [nzTotal]="total" [nzPageSize]="10"
+      (nzPageIndexChange)="pageIndexChange($event)" nzShowSizeChanger="false"></nz-pagination>
+  </div>
+</nz-spin>
   
